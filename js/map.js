@@ -1,9 +1,9 @@
-var map;
+var map; // Access global
 const LATITUDE = 13;
 const LONGITUDE = 12;
 function initMap() {
-	var myLatLng = {lat: 41.8708, lng: -87.6505},
- 		map = new google.maps.Map(document.getElementById('map'), {
+	var myLatLng = {lat: 41.8708, lng: -87.6505};
+ 	map = new google.maps.Map(document.getElementById('map'), {
     	center: myLatLng,
    		zoom: 14
   	});
@@ -11,13 +11,15 @@ function initMap() {
     var initialMarker = new google.maps.Marker({
     	position: myLatLng,
    		map: map,
-  		title: 'Hello World!'
+  		title: 'Departament of Electrical & Computer Engineering'
   	});
 
+    // Load parks in the map
+  	loadingParks();
+}
 
-
-  	loadingSymbol('#parks');
-  	//create a new httprequest for this session
+function loadingParks() {
+	//create a new httprequest for this session
 	var xmlhttp = new XMLHttpRequest();
 	//json format data resource url 
 	var url = "https://data.cityofchicago.org/api/views/pxyq-qhyd/rows.json?accessType=DOWNLOAD";
@@ -39,21 +41,13 @@ function initMap() {
 
 	        for(var i=0; i<numberOfMarkets; i++){
 	        	var latLng = "";
-	        	latLng = '{ "lat":'+ json.data[i][LATITUDE] +', "lng":'+ json.data[i][LONGITUDE] +' }';
-	        	latLng = JSON.parse(latLng); // Convert string to JSON
+	        	latLng = JSON.parse('{ "lat":'+ json.data[i][LATITUDE] +', "lng":'+ json.data[i][LONGITUDE] +' }');
 	        	var n = new google.maps.Marker({
 						    	position: latLng,
 						   		map: map,
 						  		title: 'Hello World!'
 						  	});
 	        }
-
 		}
 	}
 }
-
-
-function loadingSymbol(id1){
-	$(id1).html('<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> <span class="sr-only">Loading...</span>')
-}
-
