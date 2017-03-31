@@ -1,23 +1,24 @@
 # Habitapp
 
 ### Keywords
-Safety, budget, recreation, transportation, map, rent house.
+Safety, market, budget, recreation, transportation, map, rent house.
 
 
 ### Description of the datasets and function design
  * [Climate Data Online](https://www.ncdc.noaa.gov/cdo-web) [data type]  [data columns used] [data amount] basic information
+ * [Parks - Chicago Park District Artworks()]https://catalog.data.gov/dataset/parks-chicago-park-district-artworks) []
  * [Y] Do you use the primary dataset ”online climate data” from data.gov? 
  * [Y] [List] Are all these datasets from data.gov or data.indy.gov? If not, where are they coming from (links)?
 
 ### Brief Description
-	The moment a student seeks a safe and affordable place to rent in Chicago, Habitapp appears to give you information about the best places you could find according to your tastes and priorities
+	The moment a student seeks a safe and affordable place to rent in Chicago, Habitapp appears to give you information about the best places you could find according to your tastes and priorities. This search is based on your convenience, as a mode of transport and favorite places
 
 ### Structued description:
  * Map View:
 	1. [Y] Basic Map with specific location (your map is located in a meaningful place, city of west lafayette for example)
 	2. [Y] Markers for location of markets
-	3. [Y/N] Labels for markets' names
-	4. [Y/N] InfoWindow to show detail information of a market
+	3. [Y] Labels for markets' names
+	4. [Y] InfoWindow to show detail information of a market
 	5. [Y/N] [describe] Any other cover on the map (for example, cloud cover to show the weather effect)
 
  * Data Visualization:
