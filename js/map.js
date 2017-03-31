@@ -23,7 +23,7 @@ function initMap() {
     	position: temp,
    		map: map,
   		title: 'You rent house',
-  		icon: 'img/departament.png',
+  		icon: 'img/home.png',
   	});
 
     var infowindow = new google.maps.InfoWindow({maxWidth: 150,  content: '' });
@@ -35,9 +35,8 @@ function initMap() {
 
   	initialMarker.setAnimation(google.maps.Animation.BOUNCE);
 
-  	setTimeout('desactiveBounce()',6000);
-  	initialMarker.addListener('click', desactiveBounce);
-
+  	setTimeout('clickBounce()',6000);
+  	initialMarker.addListener('click', clickBounce);
 
     // Load parks in the map
   	loadingParks();
@@ -50,7 +49,7 @@ function initMap() {
 
 
 /* Desactive effect in initialMarker */
-function desactiveBounce() {
+function clickBounce() {
   if (initialMarker.getAnimation() !== null) {
     initialMarker.setAnimation(null);
   } else {
@@ -102,15 +101,16 @@ function calculateDistance(){
 	var origin1 = latLngDepartament;
 	var destinationA = new google.maps.LatLng(41.8808, -87.6605);
 
-	//{lat: 41.8708, lng: -87.6505}
 
 	var walking =  google.maps.TravelMode.WALKING;
+	var transportMode =  walking;
+
 	var service = new google.maps.DistanceMatrixService();
 	service.getDistanceMatrix(
 	  {
 	    origins: [origin1],
 	    destinations: [destinationA],
-	    travelMode: walking,
+	    travelMode: transportMode,
 	    unitSystem: google.maps.UnitSystem.METRIC,
 	    //avoidHighways: Boolean,
 	    //avoidTolls: Boolean,
@@ -131,8 +131,11 @@ function calculateDistance(){
 		    var to = destinations[j];
 		    console.log(element);
 		    console.log(distance);
+		    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
 		    console.log(duration);
+		    $('#timeArrive').html('<strong>' + duration + '</strong>');
 		    console.log(from);
+		    $('#homeUbicacion').html('<strong>' + from + '</strong>');
 		    console.log(to);
 		  }
 		}
