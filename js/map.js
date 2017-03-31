@@ -104,13 +104,13 @@ function calculateDistance(){
 
 	//{lat: 41.8708, lng: -87.6505}
 
-
+	var walking =  google.maps.TravelMode.WALKING;
 	var service = new google.maps.DistanceMatrixService();
 	service.getDistanceMatrix(
 	  {
 	    origins: [origin1],
 	    destinations: [destinationA],
-	    travelMode: google.maps.TravelMode.BICYCLING,
+	    travelMode: walking,
 	    unitSystem: google.maps.UnitSystem.METRIC,
 	    //avoidHighways: Boolean,
 	    //avoidTolls: Boolean,

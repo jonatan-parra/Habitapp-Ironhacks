@@ -1,5 +1,5 @@
 #map{
-    height: 400px;
+    height: 500px;
     width: 100%;
 }
 
@@ -7,6 +7,10 @@
     color: #469e34;
 }
 
+#filter{
+    width: 200px;
+    height: 42px;
+}
 
 /***********************
 Tags
@@ -15,7 +19,7 @@ Tags
 body {
 	font-family: 'Open Sans', sans-serif;
 	line-height: 20px;
-	color: #999999;
+	color: #000000;
 	font-size: 300;
 	font-size: 16px;
 }
@@ -28,6 +32,7 @@ h1, h2, h3, h4, h5, h6
 	font-family: 'Raleway', sans-serif;
 	font-weight: 600;
 	color: #222222;
+    margin-bottom: 25px;
 }
 a, a:hover, a:focus, a:active{
     outline: none;
@@ -38,8 +43,6 @@ a, a:hover, a:focus, a:active{
 
 }
 h2 {
-    line-height: 20px;
-    margin: 0;
     font-size: 28px;
     font-weight: 700;
 }

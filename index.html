@@ -64,8 +64,85 @@
 	<section id="mapSection" class="section-padding">
 		<div class="container">
 			<div class="row">
-				<h1>Information</h1>
+				<h1 class="text-center">Your preferences</h1>
+
+				<div class="col-md-6">
+					<h2 title="Choose the mode of transport you would like to use">Your mode of transport</h2>
+
+					<div class="radio">
+					  <label>
+					    <input type="radio" name="opciones" id="opciones_1" value="opc_1" checked>
+					    bicycle
+					  </label>
+					</div>
+
+					<div class="radio">
+					  <label> 
+					    <input type="radio" name="opciones" id="opciones_2" value="opc_2">
+					    Walking
+					  </label>
+					</div>
+
+					<div class="radio">
+					  <label> 
+					    <input type="radio" name="opciones" id="opciones_2" value="opc_2">
+					    Driving
+					  </label>
+					</div>
+
+					<div class="radio">
+					  <label> 
+					    <input type="radio" name="opciones" id="opciones_2" value="opc_2">
+					    Public transit
+					  </label>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<h2 title="Which places would you like to have close to where you will live">Your favorite sites</h2>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"> Parks
+						</label>
+					</div>	
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"> Libraries
+						</label>
+					</div>	
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"> Markets
+						</label>
+					</div>	
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"> Fire stations
+						</label>
+					</div>	
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"> Public Schools
+						</label>
+					</div>		
+				</div>
+				
+				<input class="btn btn-primary" type="button" id="filter" value="Filter">
+			</div>
+
+
+			<div class="row">
 				<div class="col-md-3">
+					<h2>Information Aditional</h2>
+					<p>Time to get to university from home: <span id="timeArrive"></span></p>
+
+					<p>Distance from the university to your home:<span id="distanceUniversity"></span></p>
+
+					<p>Weather information from where you live</p>
+					
 					<h2>Sites:</h2>
 
 					<div id="result"></div>
