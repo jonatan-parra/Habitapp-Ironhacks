@@ -2,9 +2,33 @@ var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};
 
+
+//travel_modes
+var bicycling;
+var driving;
+var transit;
+var walking;
+
+// travel mode initial
+var travel_mode = driving;
+
+
+
+function setTravelMode(new_mode){
+	this.travel_mode = new_mode;
+	calculateDistance();
+}
+
+function getTravelMode(){
+	return this.travel_mode;
+}
+
 const LATITUDE = 13;
 const LONGITUDE = 12;
 function initMap() {
+
+	// travel mode initial
+
 	
  	map = new google.maps.Map(document.getElementById('map'), {
     	center: latLngDepartament,
@@ -37,6 +61,15 @@ function initMap() {
 
   	setTimeout('clickBounce()',6000);
   	initialMarker.addListener('click', clickBounce);
+
+  	bicycling = google.maps.TravelMode.BICYCLING;
+    driving = google.maps.TravelMode.DRIVING;
+    transit = google.maps.TravelMode.TRANSIT;
+    walking = google.maps.TravelMode.WALKING;
+
+    // Travel mode initial
+	travel_mode = bicycling;
+
 
     // Load parks in the map
   	loadingParks();
@@ -98,19 +131,17 @@ function loadingParks() {
  
  // https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
 function calculateDistance(){  	
+
+	// Important, travelorigin 
 	var origin1 = latLngDepartament;
 	var destinationA = new google.maps.LatLng(41.8808, -87.6605);
-
-
-	var walking =  google.maps.TravelMode.WALKING;
-	var transportMode =  walking;
 
 	var service = new google.maps.DistanceMatrixService();
 	service.getDistanceMatrix(
 	  {
 	    origins: [origin1],
 	    destinations: [destinationA],
-	    travelMode: transportMode,
+	    travelMode: travel_mode,
 	    unitSystem: google.maps.UnitSystem.METRIC,
 	    //avoidHighways: Boolean,
 	    //avoidTolls: Boolean,
@@ -118,27 +149,39 @@ function calculateDistance(){
 
 	function callback(response, status) {
 		if (status == google.maps.DistanceMatrixStatus.OK) {
-		var origins = response.originAddresses;
-		var destinations = response.destinationAddresses;
+			var origins = response.originAddresses;
+			var destinations = response.destinationAddresses;
 
-		for (var i = 0; i < origins.length; i++) {
-		  var results = response.rows[i].elements;
-		  for (var j = 0; j < results.length; j++) {
-		    var element = results[j];
-		    var distance = element.distance.text;
-		    var duration = element.duration.text;
-		    var from = origins[i];
-		    var to = destinations[j];
-		    console.log(element);
-		    console.log(distance);
-		    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
-		    console.log(duration);
-		    $('#timeArrive').html('<strong>' + duration + '</strong>');
-		    console.log(from);
-		    $('#homeUbicacion').html('<strong>' + from + '</strong>');
-		    console.log(to);
-		  }
-		}
+			for (var i = 0; i < origins.length; i++) {
+			    var results = response.rows[i].elements;
+			    for (var j = 0; j < results.length; j++) {
+				    var element = results[j];
+				    var distance = element.distance.text;
+				    var duration = element.duration.text;
+				    var from = origins[i];
+				    var to = destinations[j];
+
+				    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
+				    $('#timeArrive').html('<strong>' + duration + '</strong>');
+				    $('#homeUbicacion').html('<strong>' + from + '</strong>');
+				    console.log(to)
+
+				   	var travel1 = getTravelMode();
+				   	var modeName = "No valid";
+				   	if (travel1 == bicycling){
+				   		modeName = "Bicycle"
+				   	} else if ( travel_mode == driving) {
+				   		modeName = "Driving"
+				   	} else if ( travel_mode == transit) {
+				   		modeName = "Public transit"
+				   	} else {
+				   		modeName = "Walking"
+				   	}
+
+				   	$('#modeTravel').html('<strong>' + modeName + '</strong>');
+
+			    }
+			}
 		}
 	}
 }
