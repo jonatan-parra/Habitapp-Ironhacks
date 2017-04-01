@@ -71,28 +71,28 @@
 
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="options" id="opciones_1" value="opc_1" checked>
-					    bicycle
+					    <input type="radio" name="options" id="options_1" value="opc_1" onClick="setTravelMode('BICYCLING')" checked>
+					    Bicycle
 					  </label>
 					</div>
 
 					<div class="radio">
 					  <label> 
-					    <input type="radio" name="options" id="opciones_2" value="opc_2">
+					    <input type="radio" name="options" id="options_2" value="opc_2" onClick="setTravelMode('WALKING')">
 					    Walking
 					  </label>
 					</div>
 
 					<div class="radio">
 					  <label> 
-					    <input type="radio" name="options" id="opciones_2" value="opc_2">
+					    <input type="radio" name="options" id="options_3" value="opc_3" onClick="setTravelMode('DRIVING')">
 					    Driving
 					  </label>
 					</div>
 
 					<div class="radio">
 					  <label> 
-					    <input type="radio" name="options" id="opciones_2" value="opc_2">
+					    <input type="radio" name="options" id="options_4" value="opc_4" onClick="setTravelMode('TRANSIT')">
 					    Public transit
 					  </label>
 					</div>
@@ -127,26 +127,24 @@
 						<label>
 							<input type="checkbox"> Public Schools
 						</label>
-					</div>		
-				</div>
-				
-				<input class="btn btn-primary" type="button" id="filter" value="Filter">
+					</div>	
+
+					<input class="btn btn-primary" type="button" id="filter" value="Filter">	
+				</div>			
 			</div>
 
-
+			<br>
 			<div class="row">
 				<div class="col-md-3">
 					<h2>Information Aditional</h2>
 
 					<p>Home ubication: <span id="homeUbicacion"></span></p>	
 
-					<p>Distance from the university to your home:<span id="distanceUniversity"></span></p>
+					<p>Mode of transport: <strong id="modeTravel">Walking</strong></p>
 
-					<p>Mode of transport: <strong>Walking</strong></p>
+					<p>Distance from the university to your home using this mode of transport:<span id="distanceUniversity"></span></p>
 
-					<p>Time to get to university from home: <span id="timeArrive"></span></p>
-
-					
+					<p>Time to get to university from home: <span id="timeArrive"></span></p>			
 
 					<p>Security statistics... in implementation</p>
 					<p>Diagrams...</p>
