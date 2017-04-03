@@ -13,6 +13,22 @@ var walking;
 var travel_mode = driving;
 
 
+// Var dataset
+var details_parks = 2;
+
+// State sites
+var download_parks;
+var showing_parks;
+var markers_park;
+
+function initApp(){
+	// Init sites
+	download_parks = false;
+	showing_parks = false;	
+
+	// Init the map
+	initMap();
+}
 
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
@@ -23,8 +39,7 @@ function getTravelMode(){
 	return this.travel_mode;
 }
 
-const LATITUDE = 13;
-const LONGITUDE = 12;
+
 function initMap() {
 
 	// travel mode initial
@@ -71,8 +86,7 @@ function initMap() {
 	travel_mode = bicycling;
 
 
-    // Load parks in the map
-  	loadingParks();
+
 
   	// Calculate distance
   	calculateDistance();
@@ -94,7 +108,28 @@ function clickBounce() {
 
 
 
-function loadingParks() {
+function show_or_hide_site(site){
+
+	// Load parks in the map
+	if (site == "parks"){
+		if (download_parks == false){
+  			loading_parks();
+  		} else {
+  			if (showing_parks == true){
+  				// remover marks
+  				showing_parks = false;
+			  	for(var i=0; i<details_parks.data.length; i++){
+			       	markers_park[i].setMap(null);
+			    }
+  			} else{
+  				show_parks();
+  				showing_parks = true;
+  			}
+  		}
+	}
+}
+
+function loading_parks() {
 	//create a new httprequest for this session
 	var xmlhttp = new XMLHttpRequest();
 	//json format data resource url 
@@ -107,28 +142,43 @@ function loadingParks() {
 	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	        var myArr = xmlhttp.responseText;
 	        var text = myArr;
-	        var json = JSON.parse(text);
-    
-	        //number of the markets
-	        var numberOfMarkets = json.data.length;
+	        details_parks = JSON.parse(text);
 
-	        //add markers on the map
-	        var markers = [];
+	        // Show parks when load the data
+	        download_parks = true;
+	        show_parks();
 
-	        for(var i=0; i<numberOfMarkets; i++){
-	        	var latLng = "";
-	        	latLng = JSON.parse('{ "lat":'+ json.data[i][LATITUDE] +', "lng":'+ json.data[i][LONGITUDE] +' }');
-	        	var n = new google.maps.Marker({
-						    	position: latLng,
-						   		map: map,
-						  		title: 'Name park',
-						  		icon: 'img/tree.png'
-						  	});
-	        }
-		}
+
+    	} 
 	}
 }
  
+function show_parks() {
+	latitude_park = 13;
+	longitude_park = 12;
+
+	//number of the parks
+    var numberOfMarkets = details_parks.data.length;
+    //add markers on the map
+    markers_park = [];
+
+    for(var i=0; i<numberOfMarkets; i++){
+    	var latLng = "";
+    	latLng = JSON.parse('{ "lat":'+ details_parks.data[i][latitude_park] +', "lng":'+ details_parks.data[i][longitude_park] +' }');
+    	markers_park[i] = new google.maps.Marker({
+				    	position: latLng,
+				   		map: map,
+				  		title: 'Name park',
+				  		icon: 'img/tree.png'
+				  	});
+    }
+
+    //
+    showing_parks = true;
+ } 
+
+
+
  // https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
 function calculateDistance(){  	
 
@@ -164,7 +214,6 @@ function calculateDistance(){
 				    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
 				    $('#timeArrive').html('<strong>' + duration + '</strong>');
 				    $('#homeUbicacion').html('<strong>' + from + '</strong>');
-				    console.log(to)
 
 				   	var travel1 = getTravelMode();
 				   	var modeName = "No valid";
