@@ -116,24 +116,26 @@ function show_or_hide_site(site){
   			loading_parks();
   		} else {
   			if (showing_parks == true){
+  				showing_parks = false;  // Change state app
   				// remover marks
-  				showing_parks = false;
 			  	for(var i=0; i<details_parks.data.length; i++){
 			       	markers_park[i].setMap(null);
 			    }
   			} else{
   				show_parks();
-  				showing_parks = true;
+  				showing_parks = true; // Change state app
   			}
   		}
 	}
+
+
 }
 
 function loading_parks() {
-	//create a new httprequest for this session
-	var xmlhttp = new XMLHttpRequest();
+	var xmlhttp = new XMLHttpRequest();  //create a new httprequest for this session
 	//json format data resource url 
-	var url = "https://data.cityofchicago.org/api/views/pxyq-qhyd/rows.json?accessType=DOWNLOAD";
+	//var url = "https://data.cityofchicago.org/api/views/pxyq-qhyd/rows.json?accessType=DOWNLOAD";
+	var url = "https://data.cityofchicago.org/api/views/vcti-mbcd/rows.json?accessType=DOWNLOAD";
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
 
@@ -144,37 +146,31 @@ function loading_parks() {
 	        var text = myArr;
 	        details_parks = JSON.parse(text);
 
-	        // Show parks when load the data
-	        download_parks = true;
-	        show_parks();
-
-
+	        show_parks();  // Show parks when load the data
+   	        download_parks = true; // Change state app, Is unloaded only once.
     	} 
 	}
 }
  
 function show_parks() {
-	latitude_park = 13;
-	longitude_park = 12;
+	latitude_park = 27;//13;
+	longitude_park = 26; //12;
+    markers_park = [];  //add markers on the map
 
-	//number of the parks
-    var numberOfMarkets = details_parks.data.length;
-    //add markers on the map
-    markers_park = [];
-
-    for(var i=0; i<numberOfMarkets; i++){
+    for(var i=0; i < details_parks.data.length;  i++){
     	var latLng = "";
     	latLng = JSON.parse('{ "lat":'+ details_parks.data[i][latitude_park] +', "lng":'+ details_parks.data[i][longitude_park] +' }');
     	markers_park[i] = new google.maps.Marker({
-				    	position: latLng,
-				   		map: map,
-				  		title: 'Name park',
-				  		icon: 'img/tree.png'
+				    	position: latLng, map: map, title: 'Name park', icon: 'img/tree.png'
 				  	});
+    	 console.log('{ "lat":'+ details_parks.data[i][latitude_park] +', "lng":'+ details_parks.data[i][longitude_park] +' }')
     }
 
-    //
-    showing_parks = true;
+
+
+
+
+    showing_parks = true; // Change state app
  } 
 
 
