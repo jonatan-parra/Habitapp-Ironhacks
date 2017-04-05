@@ -158,12 +158,6 @@ function calculateDistance(){
     driving = google.maps.TravelMode.DRIVING;
 	transit = google.maps.TravelMode.TRANSIT;
 	walking = google.maps.TravelMode.WALKING;
-
-
-
-
-
-
 	// Important, travelorigin 
 	var origin1 = latLngDepartament;
 	var destinationA = new google.maps.LatLng(41.8808, -87.6605);
@@ -257,8 +251,7 @@ function show_parks() {
     markers_park = [];  //add markers on the map
 
     for(var i=0; i < data_parks.data.length;  i++){
-    	var latLng = "";
-    	latLng = JSON.parse('{ "lat":'+ data_parks.data[i][latitude_park] +', "lng":'+ data_parks.data[i][longitude_park] +' }');
+    	var latLng = JSON.parse('{ "lat":'+ data_parks.data[i][latitude_park] +', "lng":'+ data_parks.data[i][longitude_park] +' }');
     	markers_park[i] = new google.maps.Marker({
 				    	position: latLng, map: map, title: 'Name park', icon: 'img/tree.png'
 				  	});
@@ -273,8 +266,7 @@ function show_schools() {
     markers_schools = [];  //add markers on the map
 
     for(var i=0; i < data_schools.data.length;  i++){
-    	var latLng = "";
-    	latLng = JSON.parse('{ "lat":'+ data_schools.data[i][latitude_schools] +', "lng":'+ data_schools.data[i][longitude_schools] +' }');
+    	var latLng = JSON.parse('{ "lat":'+ data_schools.data[i][latitude_schools] +', "lng":'+ data_schools.data[i][longitude_schools] +' }');
     	markers_schools[i] = new google.maps.Marker({
 				    	position: latLng, map: map, title: 'Name schools', icon: 'img/school.png'
 				  	});
@@ -284,21 +276,11 @@ function show_schools() {
 
  // show markers fire station
 function show_fire_station() {
-	latitude = data_fire_station.data[14][1];
-	longitude = data_fire_station.data[14][2];
-
-		console.log("La latitud: " + latitude)
-		console.log("La longitude: " + longitude)
-		console.log("otro"+ data_fire_station.data[14][3]);
     markers_fire_station = [];  //add markers on the map
-
     for(var i=0; i < data_fire_station.data.length;  i++){
-    	var latLng = "";
-    	console.log(data_fire_station);
-    	console.log('{ "lat":'+ data_fire_station.data[i][latitude] +', "lng":'+ data_fire_station.data[i][longitude] +' }');
-    	latLng = JSON.parse('{ "lat":'+ data_fire_station.data[i][latitude] +', "lng":'+ data_fire_station.data[i][longitude] +' }');
+    	var latLng = JSON.parse('{ "lat":'+ data_fire_station.data[i][14][1] +', "lng":'+ data_fire_station.data[i][14][2] +' }');
     	markers_fire_station[i] = new google.maps.Marker({
-				    	position: latLng, map: map, title: 'Name fire station', icon: 'img/tree.png'
+				    	position: latLng, map: map, title: 'Name fire station', icon: 'img/fire_station.png'
 				  	});
     }
     showing_fire_station = true; // Change state app
