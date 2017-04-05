@@ -76,6 +76,9 @@ function initMap() {
   	setTimeout('clickBounce()',6000);
   	initialMarker.addListener('click', clickBounce);
 
+  	// Travel mode initial
+	travel_mode = google.maps.TravelMode.BICYCLING;
+
   	// Calculate distance
   	calculateDistance();
 }
@@ -156,8 +159,9 @@ function calculateDistance(){
 	transit = google.maps.TravelMode.TRANSIT;
 	walking = google.maps.TravelMode.WALKING;
 
-	// Travel mode initial
-	travel_mode = bicycling;
+
+
+
 
 
 	// Important, travelorigin 
@@ -201,12 +205,13 @@ function calculateDistance(){
 				   		modeName = "Driving"
 				   	} else if ( travel_mode == transit) {
 				   		modeName = "Public transit"
-				   	} else {
+				   	} else if ( travel_mode == walking){
 				   		modeName = "Walking"
+				   	} else {
+				   		console.log("Error callback, travel mode");
 				   	}
-
 				   	$('#modeTravel').html('<strong>' + modeName + '</strong>');
-
+				//   	alert("aqui")
 			    }
 			}
 		}
@@ -298,8 +303,6 @@ function show_fire_station() {
     }
     showing_fire_station = true; // Change state app
  } 
-
-
 
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
