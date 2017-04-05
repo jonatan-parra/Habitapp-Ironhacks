@@ -23,10 +23,17 @@ var download_fire_station;  // Downloaded dataset (True/False)
 var showing_fire_station;   // Showing or not the fire_station (True/False)
 var markers_fire_station;    // List of fire_station markers
 
+// var dataset fire station farmers markets
+var data_farmer_market;  // JSON farmer_market
+var download_farmer_market;  // Downloaded dataset (True/False)
+var showing_farmer_market;   // Showing or not the farmer_market (True/False)
+var markers_farmer_market;    // List of farmer_market markers
+
 // URl Datasets
 var url_parks = "https://data.cityofchicago.org/api/views/vcti-mbcd/rows.json?accessType=DOWNLOAD";
 var url_schools = "https://data.cityofchicago.org/api/views/75e5-35kf/rows.json?accessType=DOWNLOAD";
 var url_fire_station = "https://data.cityofchicago.org/api/views/28km-gtjn/rows.json?accessType=DOWNLOAD";
+var url_farmers_markets = "https://data.cityofchicago.org/api/views/x5xx-pszi/rows.json?accessType=DOWNLOAD";
 
 function initApp(){
 	// Init sites
@@ -38,6 +45,9 @@ function initApp(){
 
 	download_fire_station = false;
 	showing_fire_station = false;
+
+	download_farmer_market = false;
+	showing_farmer_market = false;
 
 	// Init the map
 	initMap();
@@ -144,6 +154,24 @@ function show_or_hide_site(site){
   			}
   		}
 	}
+
+	// Load fire station in the map
+	if (site == "farmers_markets"){
+		if (download_farmer_market == false){
+  			loading_site(url_farmers_markets, site);
+  		} else {
+  			if (showing_farmer_market == true){
+  				showing_farmer_market = false;  // Change state app
+  				// remover marks
+			  	for(var i=0; i<data_farmer_market.data.length; i++){ 
+			  		if(i!=16) { markers_farmer_market[i].setMap(null); } 
+			  	}
+  			} else{
+  				show_farmer_market();
+  				showing_farmer_market= true; // Change state app
+  			}
+  		}
+	}
 }
 
 // https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
@@ -237,6 +265,10 @@ function loading_site(url, name_site) {
 	        	data_fire_station= JSON.parse(text);
 	        	show_fire_station();  
    	     		download_fire_station = true;
+	        } else if ( name_site == "farmers_markets"){
+	        	data_farmer_market= JSON.parse(text);
+	        	show_farmer_market();  
+   	     		download_farmer_market = true;
 	        } else {
 	        	console.log("Error en loading site")
 	        }	        
@@ -286,6 +318,26 @@ function show_fire_station() {
     showing_fire_station = true; // Change state app
  } 
 
+// Show markers farmer market
+function show_farmer_market(){
+	latitude = 18;
+	longitude = 19; 
+    markers_farmer_market = [];  //add markers on the map
+
+    for(var i=0; i < data_farmer_market.data.length;  i++){
+    	var latLng = JSON.parse('{ "lat":'+ data_farmer_market.data[i][latitude] +', "lng":'+ data_farmer_market.data[i][longitude] +' }');
+    	
+    	if( i != 16){ // In this position do not existe latitude/longitude
+	    	markers_farmer_market[i] = new google.maps.Marker({
+					    	position: latLng, map: map, title: 'Name market', icon: 'img/market.png'
+					  	});
+    	}
+    }
+    showing_farmer_market = true; // Change state app
+}
+
+
+
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
 	calculateDistance();
@@ -294,5 +346,4 @@ function setTravelMode(new_mode){
 function getTravelMode(){
 	return this.travel_mode;
 }
-
 
