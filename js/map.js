@@ -5,7 +5,7 @@ $("input:checkbox").prop('checked', false);
 var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
-var selected_house;
+var selected_house = latLngDepartament; // At the beginning there is no house selected
 
 // travel mode initial
 var travel_mode;
@@ -105,14 +105,6 @@ function initMap() {
   		icon: 'img/departament.png',
   	});
 
-    var temp = {lat: 41.8808, lng: -87.6605};
-  	var tempMarker = new google.maps.Marker({
-    	position: temp,
-   		map: map,
-  		title: 'You rent house',
-  		icon: 'img/home.png',
-  	});
-
     var infowindow = new google.maps.InfoWindow({maxWidth: 150,  content: '' });
     var content_1 = " Departament of Electrical & Computer Engineering. Address: 851 S Morgan St, Chicago, IL 60607. Phone:+1 312-996-3423";
   	google.maps.event.addListener(initialMarker, 'click', function() {
@@ -131,8 +123,7 @@ function initMap() {
   	// Travel mode initial
 	travel_mode = google.maps.TravelMode.BICYCLING;
 
-  	// Calculate distance
-  	calculateDistance();
+
 }
 
 // Desactive effect in initialMarker 
@@ -262,7 +253,7 @@ function calculateDistance(){
 	transit = google.maps.TravelMode.TRANSIT;
 	walking = google.maps.TravelMode.WALKING;
 	// Important, travelorigin 
-	var origin1 = latLngDepartament;
+	var origin1 = selected_house;
 	var destinationA = new google.maps.LatLng(41.8808, -87.6605);
 
 	var service = new google.maps.DistanceMatrixService();
@@ -471,16 +462,23 @@ function show_house() {
 	    	markers_house[i] = new google.maps.Marker({
 					    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
 					  	});
-	    	markers_house[i].addListener('click', selectHouse);
+	    	//markers_house[i].addListener('click', selectHouse);
+	    	markers_house[i].addListener('click', function() {
+									  //console.log(this.title);
+									console.log(this.position.lat());
+									console.log(this.position.lng());
+									new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
+									// Calculate distance
+									selected_house = new_selected_house;
+  									calculateDistance();
+
+			});
 	    }
     }
     showing_house = true; // Change state app
 } 
 
-function selectHouse(){
-	//console.log(data_house.data[number_house][13]);
-	console.log("Click in house");
-}
+
 
 
 function setTravelMode(new_mode){
