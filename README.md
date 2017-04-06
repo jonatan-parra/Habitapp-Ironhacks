@@ -10,9 +10,9 @@ Safety, market, budget, recreation, transportation, map, rent, calculate distanc
  * [Chicago Public Schools - School Locations SY1617](https://catalog.data.gov/dataset/chicago-public-schools-school-locations-sy1617) [Short_Name, Lat, Long][670] Locations of educational units in the Chicago Public School District for school year 2016-2017.
  * [Fire Stations](https://catalog.data.gov/dataset/fire-stations-61d88) [NAME, LOCATION] [92] Fire station locations
  * [Farmers Markets - 2015](https://catalog.data.gov/dataset/farmers-markets-2015) [LATITUDE, LONGITUDE, LOCATION ] [47] Chicago's Farmers Markets bring more than 70 vendors selling fresh fruits, vegetables, plants and flowers to neighborhoods throughout the City of Chicago. Markets are held Tuesday, Wednesday, Thursday, Saturday and Sunday around the city.
- * [Libraries - Locations, Hours and Contact Information](https://catalog.data.gov/dataset/libraries-locations-hours-and-contact-information-f3c61)
- * [Police Stations](https://catalog.data.gov/dataset/police-stations-3a3a8)
- * [Affordable Rental Housing Developments](https://catalog.data.gov/dataset/affordable-rental-housing-developments-ef5c2)
+ * [Libraries - Locations, Hours and Contact Information](https://catalog.data.gov/dataset/libraries-locations-hours-and-contact-information-f3c61) [NAME, LOCATION] [80]Chicago Public Library locations, contact information, and hours of operation.
+ * [Police Stations](https://catalog.data.gov/dataset/police-stations-3a3a8) [ADDRESS, LATITUDE, LONGITUDE] [23] Chicago Police district station locations and contact information.
+ * [Affordable Rental Housing Developments](https://catalog.data.gov/dataset/affordable-rental-housing-developments-ef5c2) [Address, Latitude, Longitude] [263] The affordable rental housing developments listed below are supported by the City of Chicago to maintain affordability standards.
  * [Y] Do you use the primary dataset ”online climate data” from data.gov? 
  * [Y] [List] Are all these datasets from data.gov or data.indy.gov? If not, where are they coming from (links)?
 

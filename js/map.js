@@ -394,7 +394,7 @@ function show_farmer_market(){
 	latitude = 18;
 	longitude = 19; 
     markers_farmer_market = [];  //add markers on the map
-  console.log("cantidad " + data_farmer_market.data.length);
+
     for(var i=0; i < data_farmer_market.data.length;  i++){
     	var name_farmer_market = data_farmer_market.data[i][8];
     	var latLng = JSON.parse('{ "lat":'+ data_farmer_market.data[i][latitude] +', "lng":'+ data_farmer_market.data[i][longitude] +' }');
@@ -437,6 +437,8 @@ function show_police_station() {
 // show markers house
 function show_house() {
     markers_house = [];  //add markers on the map
+     console.log("cantidad " + data_house.data.length);
+
     for(var i=0; i < data_house.data.length;  i++){
     	var address_house = data_house.data[i][12];
     	var latLng = JSON.parse('{ "lat":'+ data_house.data[i][19] +', "lng":'+ data_house.data[i][20] +' }');
