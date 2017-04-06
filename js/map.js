@@ -112,28 +112,12 @@ function initMap() {
       infowindow.open(map, initialMarker);
     });
 
-  	initialMarker.setAnimation(google.maps.Animation.BOUNCE);
-
-  	setTimeout('clickBounce()',6000);
-  	initialMarker.addListener('click', clickBounce);
-
   	// Load house
   	loading_site(url_house, "house");
 
   	// Travel mode initial
 	travel_mode = google.maps.TravelMode.BICYCLING;
 
-
-}
-
-// Desactive effect in initialMarker 
-function clickBounce() {
-  if (initialMarker.getAnimation() !== null) {
-    initialMarker.setAnimation(null);
-  } else {
-    initialMarker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout('desactiveBounce()',4000);
-  }
 
 }
 
@@ -253,8 +237,8 @@ function calculateDistance(){
 	transit = google.maps.TravelMode.TRANSIT;
 	walking = google.maps.TravelMode.WALKING;
 	// Important, travelorigin 
-	var origin1 = selected_house;
-	var destinationA = new google.maps.LatLng(41.8808, -87.6605);
+	var origin1 = latLngDepartament;
+	var destinationA = selected_house;
 
 	var service = new google.maps.DistanceMatrixService();
 	service.getDistanceMatrix(
@@ -283,7 +267,7 @@ function calculateDistance(){
 
 				    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
 				    $('#timeArrive').html('<strong>' + duration + '</strong>');
-				    $('#homeUbicacion').html('<strong>' + from + '</strong>');
+				    $('#homeUbicacion').html('<strong>' + to + '</strong>');
 
 				   	var travel1 = getTravelMode();
 				   	var modeName = "No valid";
@@ -299,7 +283,6 @@ function calculateDistance(){
 				   		console.log("Error callback, travel mode");
 				   	}
 				   	$('#modeTravel').html('<strong>' + modeName + '</strong>');
-				//   	alert("aqui")
 			    }
 			}
 		}
@@ -360,10 +343,10 @@ function show_parks() {
 	longitude_park = 26; //12;
     markers_park = [];  //add markers on the map
     name_parks = [];  // Name parks 
-
     for(var i=0; i < data_parks.data.length;  i++){
     	var latLng = JSON.parse('{ "lat":'+ data_parks.data[i][latitude_park] +', "lng":'+ data_parks.data[i][longitude_park] +' }');
       	var name_park = data_parks.data[i][9];
+
       	if ( name_parks.indexOf(name_park) < 0 ) {
       		name_parks.push(name_park);
 	    	markers_park[i] = new google.maps.Marker({
@@ -380,7 +363,6 @@ function show_schools() {
 	longitude_schools = 18; ;
     markers_schools = [];  //add markers on the map
     name_schools = []; // Name schools
-
     for(var i=0; i < data_schools.data.length;  i++){
     	var name_school = data_schools.data[i][9];
     	var latLng = JSON.parse('{ "lat":'+ data_schools.data[i][latitude_schools] +', "lng":'+ data_schools.data[i][longitude_schools] +' }');
@@ -412,7 +394,7 @@ function show_farmer_market(){
 	latitude = 18;
 	longitude = 19; 
     markers_farmer_market = [];  //add markers on the map
-
+  console.log("cantidad " + data_farmer_market.data.length);
     for(var i=0; i < data_farmer_market.data.length;  i++){
     	var name_farmer_market = data_farmer_market.data[i][8];
     	var latLng = JSON.parse('{ "lat":'+ data_farmer_market.data[i][latitude] +', "lng":'+ data_farmer_market.data[i][longitude] +' }');
@@ -477,9 +459,6 @@ function show_house() {
     }
     showing_house = true; // Change state app
 } 
-
-
-
 
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
