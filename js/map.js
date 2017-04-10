@@ -67,26 +67,15 @@ var url_house = "https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.json?ac
 
 function initApp(){
 	// Init sites
-	download_parks = false;
-	showing_parks = false;	
+	download_parks = showing_parks = false;	
+	download_schools = showing_schools = false; 
+	download_fire_station = showing_fire_station = false;
 
-	download_schools = false; 
-	showing_schools = false; 
+	download_farmer_market = showing_farmer_market = false;
+	download_libraries = showing_libraries = false;
+	download_police_station = showing_police_station = false;
 
-	download_fire_station = false;
-	showing_fire_station = false;
-
-	download_farmer_market = false;
-	showing_farmer_market = false;
-
-	download_libraries = false;
-	showing_libraries = false;
-
-	download_police_station = false;
-	showing_police_station = false;
-
-	download_house = false;
-	showing_house = false;
+	download_house = showing_house = false;
 
 	// Init the map
 	initMap();
@@ -292,7 +281,6 @@ function calculateDistance(){
 // ------------------------------ Load site dataset --------------------------------------------------//
 function loading_site(url, name_site) {
 	var xmlhttp = new XMLHttpRequest();  //create a new httprequest for this session
-	//var url = "https://data.cityofchicago.org/api/views/75e5-35kf/rows.json?accessType=DOWNLOAD"; //json format data resource url 
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
 
@@ -337,101 +325,80 @@ function loading_site(url, name_site) {
 	}
 }
 
-// Show markers parks 
-function show_parks() {
-	latitude_park = 27;//13;
-	longitude_park = 26; //12;
-    markers_park = [];  //add markers on the map
-    name_parks = [];  // Name parks 
-    for(var i=0; i < data_parks.data.length;  i++){
-    	var latLng = JSON.parse('{ "lat":'+ data_parks.data[i][latitude_park] +', "lng":'+ data_parks.data[i][longitude_park] +' }');
-      	var name_park = data_parks.data[i][9];
-
-      	if ( name_parks.indexOf(name_park) < 0 ) {
-      		name_parks.push(name_park);
-	    	markers_park[i] = new google.maps.Marker({
-					    		position: latLng, map: map, title: name_park, icon: 'img/tree.png'
-					  		});
-    	}
-    }
-    showing_parks = true; // Change state app
- } 
+// show markers parks
+function show_parks(){
+	// params (position latitude, position longitude, position name site or other date, data_set, icon)
+	markers_park = show_place_markers(27, 26, 9, data_parks, 'img/tree.png');
+	showing_parks = true; // Change state app
+}
 
 // show markers schools
 function show_schools() {
-	latitude_schools = 17;
-	longitude_schools = 18; ;
-    markers_schools = [];  //add markers on the map
-    name_schools = []; // Name schools
-    for(var i=0; i < data_schools.data.length;  i++){
-    	var name_school = data_schools.data[i][9];
-    	var latLng = JSON.parse('{ "lat":'+ data_schools.data[i][latitude_schools] +', "lng":'+ data_schools.data[i][longitude_schools] +' }');
-    	if ( name_schools.indexOf(name_school) < 0 ) {
-			name_schools.push(name_school);
-    		markers_schools[i] = new google.maps.Marker({
-				    				position: latLng, map: map, title: name_school, icon: 'img/school.png'
-				  				});
-    	}
-    }
-    showing_schools = true; // Change state app
- } 
-
- // show markers fire station
-function show_fire_station() {
-    markers_fire_station = [];  //add markers on the map
-    for(var i=0; i < data_fire_station.data.length;  i++){
-    	var name_fire_station = data_fire_station.data[i][8];
-    	var latLng = JSON.parse('{ "lat":'+ data_fire_station.data[i][14][1] +', "lng":'+ data_fire_station.data[i][14][2] +' }');
-    	markers_fire_station[i] = new google.maps.Marker({
-				    	position: latLng, map: map, title: name_fire_station, icon: 'img/fire_station.png'
-				  	});
-    }
-    showing_fire_station = true; // Change state app
- } 
+	markers_schools = show_place_markers(17, 18, 9, data_schools, 'img/school.png' );
+	showing_schools = true; // Change state app
+}
 
 // Show markers farmer market
 function show_farmer_market(){
-	latitude = 18;
-	longitude = 19; 
-    markers_farmer_market = [];  //add markers on the map
+	markers_farmer_market = show_place_markers(18, 19, 8, data_farmer_market, 'img/market.png');
+	showing_farmer_market = true; // Change state app
+}
 
-    for(var i=0; i < data_farmer_market.data.length;  i++){
-    	var name_farmer_market = data_farmer_market.data[i][8];
-    	var latLng = JSON.parse('{ "lat":'+ data_farmer_market.data[i][latitude] +', "lng":'+ data_farmer_market.data[i][longitude] +' }');
-    	
-    	if( i != 16){ // In this position do not existe latitude/longitude
-	    	markers_farmer_market[i] = new google.maps.Marker({
-					    	position: latLng, map: map, title: name_farmer_market, icon: 'img/market.png'
-					  	});
-    	}
-    }
-    showing_farmer_market = true; // Change state app
+// show markers police station
+function show_police_station() {
+	markers_police_station = show_place_markers(20, 21 , 10 , data_police_station, 'img/police.png');
+	showing_police_station = true; // Change state app
+}
+
+// show markers fire station
+function show_fire_station() {
+	// params (position lat_lng, position name site or other date, data_set, icon )
+	markers_fire_station = show_place_markers_1 (14, 8, data_fire_station, 'img/fire_station.png');
+	showing_fire_station = true; // Change state app
 }
 
 // show markers libraries
 function show_libraries() {
-    markers_libraries = [];  //add markers on the map
-    for(var i=0; i < data_libraries.data.length;  i++){
-    	var name_librarie = data_libraries.data[i][8];
-    	var latLng = JSON.parse('{ "lat":'+ data_libraries.data[i][18][1] +', "lng":'+ data_libraries.data[i][18][2] +' }');
-    	markers_libraries[i] = new google.maps.Marker({
-				    	position: latLng, map: map, title: name_librarie, icon: 'img/library.png'
-				  	});
-    }
-    showing_fire_station = true; // Change state app
+	markers_libraries = show_place_markers_1(18, 8, data_libraries, 'img/library.png');
+	showing_libraries = true; // Change state app
+}
+
+// Show markers sites
+function show_place_markers(lat, lng, name1, data_site, img_icon ) {
+    sites = [];  //add markers on the map
+    names = [];  // Name site or other information important 
+    for(var i=0; i < data_site.data.length;  i++){
+    	var latLng = JSON.parse('{ "lat":'+ data_site.data[i][lat] +', "lng":'+ data_site.data[i][lng] +' }');
+      	var name = data_site.data[i][name1];
+	    if (data_site.data[i][lat] != null ){ // Verify that the latitude in the dataset is valid
+	      	if ( names.indexOf(name) < 0 ) {
+	      		names.push(name);
+		    	sites[i] = new google.maps.Marker({
+						    		position: latLng, map: map, title: name, icon: img_icon
+						  		});
+	    	}
+	    }
+	}
+    return sites;
 } 
 
-// show markers police station
-function show_police_station() {
-    markers_police_station = [];  //add markers on the map
-    for(var i=0; i < data_police_station.data.length;  i++){
-    	var address_police_station = data_police_station.data[i][10];
-    	var latLng = JSON.parse('{ "lat":'+ data_police_station.data[i][20] +', "lng":'+ data_police_station.data[i][21] +' }');
-    	markers_police_station[i] = new google.maps.Marker({
-				    	position: latLng, map: map, title: address_police_station, icon: 'img/police.png'
-				  	});
-    }
-    showing_police_station = true; // Change state app
+// Show markers sites, format json in latitude and longitude
+function show_place_markers_1(lat_lng, name1, data_site, img_icon ) {
+    sites = [];  //add markers on the map
+    names = [];  // Name site or other information important 
+    for(var i=0; i < data_site.data.length;  i++){
+    	var latLng = JSON.parse('{ "lat":'+ data_site.data[i][lat_lng][1] +', "lng":'+ data_site.data[i][lat_lng][2] +' }');
+      	var name = data_site.data[i][name1];
+	    if (data_site.data[i][lat_lng][1] != null ){ // Verify that the latitude in the dataset is valid
+	      	if ( names.indexOf(name) < 0 ) {
+	      		names.push(name);
+		    	sites[i] = new google.maps.Marker({
+						    		position: latLng, map: map, title: name, icon: img_icon
+						  		});
+	    	}
+	    }
+	}
+    return sites;
 } 
 
 // show markers house
@@ -448,19 +415,16 @@ function show_house() {
 					  	});
 	    	//markers_house[i].addListener('click', selectHouse);
 	    	markers_house[i].addListener('click', function() {
-									  //console.log(this.title);
-									console.log(this.position.lat());
-									console.log(this.position.lng());
 									new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
 									// Calculate distance
 									selected_house = new_selected_house;
   									calculateDistance();
-
 			});
 	    }
     }
     showing_house = true; // Change state app
 } 
+
 
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
