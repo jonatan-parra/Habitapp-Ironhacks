@@ -254,10 +254,21 @@ function getContentInfoWindow(num, data_site, i){
 		name = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> ";
 		address = "<strong> Address:</strong>  " +  data_site.data[i][9] + '<br />' ;
 		mytext = name + address;
+	} else if ( num == S_SCHOOL ) {
+		name = '<p class= "title_info_window">'+ data_site.data[i][9] + "</p> ";
+		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
+		grades = "<strong> Grades:</strong>  " +  data_site.data[i][16] + '<br />' ;
+		phone =  "<strong> Phone:</strong>  " + data_site.data[i][19] + '<br />' ;
+		mytext = name + address + grades + phone;
 	}
 
 	return mytext;
 }
+
+
+
+
+
 
 // Show markers sites
 function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
