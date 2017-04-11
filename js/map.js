@@ -2,10 +2,27 @@
 $("input:checkbox").prop('checked', false);
 
 
+var markers_house;
+function setMaxDistance(){
+	var maxDistance = document.getElementById("distance").value;
+	updateHomes(maxDistance);
+}
+
+function updateHomes(distance){
+	//markers_1 = markers_site[S_HOUSE]
+  	for ( s in markers_house ){
+		markers_house[s].setMap(null);	
+	}
+	console.log("Distancia maxima " +  distance); 
+	show_house(distance);
+}
+
+
 var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
+
 
 // travel mode 
 var travel_mode;
@@ -60,6 +77,10 @@ function initApp(){
 	show_site[S_POLICE_STATION] = show_police_station;
 
 	initMap();
+/* 
+{lat: 41.8708, lng: -87.6505}
+*/
+	//console.log(distancia(41.8708, -87.6505, 42.8708, -87.6888));
 }
 
 function initMap() {
@@ -84,6 +105,7 @@ function initMap() {
 
   	// Load house
   	loading_site(url_site[S_HOUSE], S_HOUSE);
+
 
   	// Travel mode initial
 	travel_mode = google.maps.TravelMode.BICYCLING;
@@ -110,6 +132,18 @@ function show_or_hide_site(site){
 		}
 	}
 	//console.log(site);
+}
+
+function calculateDistanceOfHouse(lat1,lon1,lat2,lon2){
+	//https://www.sunearthtools.com/es/tools/distance.php
+	rad = function(x) {return x*Math.PI/180;}
+	var R = 6378.137;
+	var dLat = rad( lat2 - lat1 );
+	var dLong = rad( lon2 - lon1 );
+	var a = (Math.sin(dLat/2) * Math.sin(dLat/2)) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	var d = R * c;
+	return d.toFixed(3); //Returns three decimals
 }
 
 // https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
@@ -344,25 +378,32 @@ function show_place_markers_1(lat_lng, name1, data_site, img_icon, num ) {
 } 
 
 // show markers house
-function show_house() {
+function show_house(maxDistance=50) {
     markers_house = [];  //add markers on the map
     data_house = data_site[S_HOUSE];
     for(var i=0; i < data_house.data.length;  i++){
     	var address_house = data_house.data[i][12];
     	var latLng = JSON.parse('{ "lat":'+ data_house.data[i][19] +', "lng":'+ data_house.data[i][20] +' }');
     	if (data_house.data[i][19] != null){
-	    	markers_house[i] = new google.maps.Marker({
-					    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
-					  	});
-	    	//markers_house[i].addListener('click', selectHouse);
-	    	markers_house[i].addListener('click', function() {
-									new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
-									// Calculate distance
-									selected_house = new_selected_house;
-  									calculateDistance();
-			});
+    		distanceHouse = calculateDistanceOfHouse(data_house.data[i][19], data_house.data[i][20], 41.8708, -87.6505);
+    		//console.log(distanceHouse);
+    		if( distanceHouse < maxDistance ){
+    			console.log(distanceHouse);
+		    	markers_house[i] = new google.maps.Marker({
+						    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
+						  	});
+		    	
+		    	markers_house[i].addListener('click', function() {
+										new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
+										// Calculate distance
+										selected_house = new_selected_house;
+	  									calculateDistance();
+				});
+			}
 	    }
     }
+    showing_site[S_HOUSE] = true;
+    return markers_house;
 } 
 
 function setTravelMode(new_mode){
