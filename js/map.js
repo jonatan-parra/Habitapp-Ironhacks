@@ -238,10 +238,32 @@ function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
 	    if (data_site.data[i][lat] != null ){ // Verify that the latitude in the dataset is valid
 	      	if ( names.indexOf(name) < 0 ) {
 	      		names.push(name);
-		    	sites[i] = new google.maps.Marker({
-						    		position: latLng, map: map, title: name, icon: img_icon
-						  		});
-	    	}
+
+				var mytext = 'Infowindow contents in HTML'
+				if (num == S_FARMER_MARKET){
+					location1 = data_site.data[i][8] + ", "; // 
+					day = data_site.data[i][10]  + ": ";
+					star_time = data_site.data[i][11] + " to "; // 
+					end_time = data_site.data[i][12] + ", "; // 
+					web_site = data_site.data[i][15][0];
+					mytext = location1 + day + star_time + end_time + web_site;
+				}
+				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
+
+				// Add marker
+		    	m = new google.maps.Marker({
+						    		position: latLng, map: map, title: name, icon: img_icon,
+						    		infowindow: myinfowindow
+				});
+
+				// Add infoWindow
+			  	google.maps.event.addListener(m, 'click', function() {
+			      this.infowindow.open(map, this);
+			    });
+
+			    // Add marker in array
+			  	sites[i] = m;
+		    }
 	    }
 	}
 	showing_site[num] = true;
@@ -258,9 +280,23 @@ function show_place_markers_1(lat_lng, name1, data_site, img_icon, num ) {
 	    if (data_site.data[i][lat_lng][1] != null ){ // Verify that the latitude in the dataset is valid
 	      	if ( names.indexOf(name) < 0 ) {
 	      		names.push(name);
-		    	sites[i] = new google.maps.Marker({
-						    		position: latLng, map: map, title: name, icon: img_icon
-						  		});
+
+				var mytext = 'Infowindow contents in HTML'
+				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
+
+	      		// Add marker
+		    	m = new google.maps.Marker({
+						    		position: latLng, map: map, title: name, icon: img_icon,
+						    		infowindow: myinfowindow
+				});
+
+		    	// Add infoWindow
+			  	google.maps.event.addListener(m, 'click', function() {
+			      this.infowindow.open(map, this);
+			    });
+
+		    	// Add marker in array
+		    	sites[i] = m;
 	    	}
 	    }
 	}
