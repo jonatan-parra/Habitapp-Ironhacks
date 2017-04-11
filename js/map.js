@@ -230,22 +230,30 @@ function show_libraries() {
 
 function getContentInfoWindow(num, data_site, i){
 	var mytext = "Text no edited";
-	if (num == S_FARMER_MARKET){
+	if ( num == S_FARMER_MARKET ){
 		location1 = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> "; // 
-		day = data_site.data[i][10]  + ": ";
+		day = "<strong> Schedule:</strong>  " + data_site.data[i][10]  + ": ";
 		star_time = data_site.data[i][11] + " to "; // 
 		end_time = data_site.data[i][12] + ", "; // 
 		web_site = data_site.data[i][15][0];
 		web_site = '<br /><a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
 		mytext = location1 + day + star_time + end_time + web_site;
-	} else if (num == S_LIBRARY) {
+	} else if ( num == S_LIBRARY ) {
 		name = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> ";
-		schedule = data_site.data[i][9] + '<br />' ;
-		address = "Address: " +  data_site.data[i][12] + '<br />' ;
-		phone =  "Phone: " + data_site.data[i][16] + '<br />' ;
+		schedule = "<strong> Schedule:</strong>  " + data_site.data[i][9] + '<br />' ;
+		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
+		phone =  "<strong> Phone:</strong>  " + data_site.data[i][16] + '<br />' ;
 		web_site = data_site.data[i][17];
 		web_site = '<a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
 		mytext = name + schedule + address + phone + web_site;
+	} else if ( num == S_PARK ){
+		name = '<p class= "title_info_window">'+ data_site.data[i][9] + "</p> ";
+		address = "<strong> Address:</strong>  " +  data_site.data[i][19] + '<br />' ;
+		mytext = name + address;
+	} else if ( num == S_FIRE_STATION ){
+		name = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> ";
+		address = "<strong> Address:</strong>  " +  data_site.data[i][9] + '<br />' ;
+		mytext = name + address;
 	}
 
 	return mytext;
