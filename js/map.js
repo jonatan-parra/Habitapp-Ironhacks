@@ -260,6 +260,13 @@ function getContentInfoWindow(num, data_site, i){
 		grades = "<strong> Grades:</strong>  " +  data_site.data[i][16] + '<br />' ;
 		phone =  "<strong> Phone:</strong>  " + data_site.data[i][19] + '<br />' ;
 		mytext = name + address + grades + phone;
+	} else if ( num == S_POLICE_STATION ){
+		name = '<p class= "title_info_window">'+  "District: "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "</p> ";
+		address = "<strong> Address:</strong>  " +  data_site.data[i][10] + '<br />' ;
+		phone =  "<strong> Phone:</strong>  " + data_site.data[i][15] + '<br />' ;
+		web_site = data_site.data[i][14][0];
+		web_site = '<a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
+		mytext = name + address + phone + web_site;
 	}
 
 	return mytext;
