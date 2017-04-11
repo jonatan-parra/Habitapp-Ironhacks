@@ -12,6 +12,10 @@
     height: 42px;
 }
 
+.title_info_window{
+    font-weight: bold;
+}
+
 /***********************
 Tags
 *************************/

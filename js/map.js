@@ -228,6 +228,29 @@ function show_libraries() {
 	markers_site[S_LIBRARY] = show_place_markers_1(18, 8, data_site[S_LIBRARY], 'img/library.png', S_LIBRARY);
 }
 
+function getContentInfoWindow(num, data_site, i){
+	var mytext = "Text no edited";
+	if (num == S_FARMER_MARKET){
+		location1 = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> "; // 
+		day = data_site.data[i][10]  + ": ";
+		star_time = data_site.data[i][11] + " to "; // 
+		end_time = data_site.data[i][12] + ", "; // 
+		web_site = data_site.data[i][15][0];
+		web_site = '<br /><a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
+		mytext = location1 + day + star_time + end_time + web_site;
+	} else if (num == S_LIBRARY) {
+		name = '<p class= "title_info_window">'+ data_site.data[i][8] + "</p> ";
+		schedule = data_site.data[i][9] + '<br />' ;
+		address = "Address: " +  data_site.data[i][12] + '<br />' ;
+		phone =  "Phone: " + data_site.data[i][16] + '<br />' ;
+		web_site = data_site.data[i][17];
+		web_site = '<a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
+		mytext = name + schedule + address + phone + web_site;
+	}
+
+	return mytext;
+}
+
 // Show markers sites
 function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
     sites = [];  //add markers on the map
@@ -239,21 +262,12 @@ function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
 	      	if ( names.indexOf(name) < 0 ) {
 	      		names.push(name);
 
-				var mytext = 'Infowindow contents in HTML'
-				if (num == S_FARMER_MARKET){
-					location1 = data_site.data[i][8] + ", "; // 
-					day = data_site.data[i][10]  + ": ";
-					star_time = data_site.data[i][11] + " to "; // 
-					end_time = data_site.data[i][12] + ", "; // 
-					web_site = data_site.data[i][15][0];
-					mytext = location1 + day + star_time + end_time + web_site;
-				}
+				var mytext = getContentInfoWindow(num, data_site, i);
 				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
 
 				// Add marker
 		    	m = new google.maps.Marker({
-						    		position: latLng, map: map, title: name, icon: img_icon,
-						    		infowindow: myinfowindow
+						    		position: latLng, map: map, title: name, icon: img_icon, infowindow: myinfowindow
 				});
 
 				// Add infoWindow
@@ -281,13 +295,12 @@ function show_place_markers_1(lat_lng, name1, data_site, img_icon, num ) {
 	      	if ( names.indexOf(name) < 0 ) {
 	      		names.push(name);
 
-				var mytext = 'Infowindow contents in HTML'
+				var mytext = getContentInfoWindow(num, data_site, i);
 				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
 
 	      		// Add marker
 		    	m = new google.maps.Marker({
-						    		position: latLng, map: map, title: name, icon: img_icon,
-						    		infowindow: myinfowindow
+						    		position: latLng, map: map, title: name, icon: img_icon, infowindow: myinfowindow
 				});
 
 		    	// Add infoWindow
