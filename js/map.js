@@ -249,7 +249,7 @@ function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
 } 
 
 // Show markers sites, format json in latitude and longitude
-function show_place_markers_1(lat_lng, name1, data_site, img_icon ) {
+function show_place_markers_1(lat_lng, name1, data_site, img_icon, num ) {
     sites = [];  //add markers on the map
     names = [];  // Name site or other information important 
     for(var i=0; i < data_site.data.length;  i++){
