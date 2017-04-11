@@ -7,44 +7,35 @@ var initialMarker;
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
 
-// travel mode initial
+// travel mode 
 var travel_mode;
 
-// Var dataset parks
-var data_parks;  // JSON park
-var download_parks;  // Downloaded dataset (True/False)
-var showing_parks;   // Showing or not the parks (True/False)
-var markers_park;    // List of park markers
+var data_site = [];  // Dataset site
+var download_site = []; // Downloaded dataset (True/False)
+var showing_site = []; // Showing or not the sites (True/False)
+var markers_site = [];  // List of sites markers
 
-// var dataset schools
-var data_schools;  // JSON schools
-var download_schools;  // Downloaded dataset (True/False)
-var showing_schools;   // Showing or not the parks (True/False)
-var markers_schools;    // List of schools markers
+var show_site = []; // Function show
 
-// var dataset fire station
-var data_fire_station;  // JSON fire_station
-var download_fire_station;  // Downloaded dataset (True/False)
-var showing_fire_station;   // Showing or not the fire_station (True/False)
-var markers_fire_station;    // List of fire_station markers
+var S_HOUSE = 0;
+var S_PARK = 1;
+var S_SCHOOL = 2;
+var S_FIRE_STATION = 3;
+var S_FARMER_MARKET = 4;
+var S_LIBRARY = 5;
+var S_POLICE_STATION = 6;
+var number_of_sites = 6;
 
-// var dataset farmers markets
-var data_farmer_market;  // JSON farmer_market
-var download_farmer_market;  // Downloaded dataset (True/False)
-var showing_farmer_market;   // Showing or not the farmer_market (True/False)
-var markers_farmer_market;    // List of farmer_market markers
+// URl Datasets
+var url_site = [];
+url_site[S_HOUSE] = "https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.json?accessType=DOWNLOAD";
+url_site[S_PARK] = "https://data.cityofchicago.org/api/views/vcti-mbcd/rows.json?accessType=DOWNLOAD";
+url_site[S_SCHOOL] = "https://data.cityofchicago.org/api/views/75e5-35kf/rows.json?accessType=DOWNLOAD";
+url_site[S_FIRE_STATION] = "https://data.cityofchicago.org/api/views/28km-gtjn/rows.json?accessType=DOWNLOAD";
+url_site[S_FARMER_MARKET] = "https://data.cityofchicago.org/api/views/x5xx-pszi/rows.json?accessType=DOWNLOAD";
+url_site[S_LIBRARY] = "https://data.cityofchicago.org/api/views/x8fc-8rcq/rows.json?accessType=DOWNLOAD";
+url_site[S_POLICE_STATION] = "https://data.cityofchicago.org/api/views/z8bn-74gv/rows.json?accessType=DOWNLOAD";
 
-// var dataset libraries
-var data_libraries;  // JSON libraries
-var download_libraries;  // Downloaded dataset (True/False)
-var showing_libraries;   // Showing or not the libraries (True/False)
-var markers_libraries;    // List of libraries markers
-
-// var dataset police_station
-var data_police_station;  // JSON police_station
-var download_police_station;  // Downloaded dataset (True/False)
-var showing_police_station;   // Showing or not the police_station (True/False)
-var markers_police_station;    // List of police_station markers
 
 // var dataset house
 var data_house;  // JSON house
@@ -53,31 +44,21 @@ var showing_house;   // Showing or not the house (True/False)
 var markers_house;    // List of house markers
 var listener_house;   // listener on click house
 
-
-// URl Datasets
-var url_parks = "https://data.cityofchicago.org/api/views/vcti-mbcd/rows.json?accessType=DOWNLOAD";
-var url_schools = "https://data.cityofchicago.org/api/views/75e5-35kf/rows.json?accessType=DOWNLOAD";
-var url_fire_station = "https://data.cityofchicago.org/api/views/28km-gtjn/rows.json?accessType=DOWNLOAD";
-var url_farmers_markets = "https://data.cityofchicago.org/api/views/x5xx-pszi/rows.json?accessType=DOWNLOAD";
-var url_libraries = "https://data.cityofchicago.org/api/views/x8fc-8rcq/rows.json?accessType=DOWNLOAD";
-var url_police_station = "https://data.cityofchicago.org/api/views/z8bn-74gv/rows.json?accessType=DOWNLOAD";
-
-// Url house
-var url_house = "https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.json?accessType=DOWNLOAD";
-
 function initApp(){
 	// Init sites
-	download_parks = showing_parks = false;	
-	download_schools = showing_schools = false; 
-	download_fire_station = showing_fire_station = false;
+	for (var i = 0; i <= number_of_sites; i++) {
+		showing_site[i] = false;
+		download_site[i] = false;
+	}
 
-	download_farmer_market = showing_farmer_market = false;
-	download_libraries = showing_libraries = false;
-	download_police_station = showing_police_station = false;
+	show_site[S_PARK] = show_parks;
+	show_site[S_HOUSE] = show_house;
+	show_site[S_SCHOOL] = show_schools;
+	show_site[S_FIRE_STATION] = show_fire_station;
+	show_site[S_FARMER_MARKET] = show_farmer_market;
+	show_site[S_LIBRARY] = show_libraries;
+	show_site[S_POLICE_STATION] = show_police_station;
 
-	download_house = showing_house = false;
-
-	// Init the map
 	initMap();
 }
 
@@ -102,113 +83,31 @@ function initMap() {
     });
 
   	// Load house
-  	loading_site(url_house, "house");
+  	loading_site(url_site[S_HOUSE], S_HOUSE);
 
   	// Travel mode initial
 	travel_mode = google.maps.TravelMode.BICYCLING;
-
-
 }
 
 // Show or hide markers site in the map
 function show_or_hide_site(site){
 
-	// Load parks in the map
-	if (site == "parks"){
-		if (download_parks == false){
-  			loading_site(url_parks, site);
-  		} else {
-  			if (showing_parks == true){
-  				showing_parks = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_park){ markers_park[s].setMap(null);	}
-  			} else{
-  				show_parks();
-  				showing_parks = true; // Change state app
-  			}
-  		}
-	}
-
-	// Load school in the map
-	if (site == "schools"){
-		if (download_schools == false){
-  			loading_site(url_schools, site);
-  		} else {
-  			if (showing_schools == true){
-  				showing_schools = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_schools){ markers_schools[s].setMap(null);	}
-  			} else{
-  				show_schools();
-  				showing_schools = true; // Change state app
-  			}
-  		}
-	}
-
-	// Load fire station in the map
-	if (site == "fire_stations"){
-		if (download_fire_station == false){
-  			loading_site(url_fire_station, site);
-  		} else {
-  			if (showing_fire_station == true){
-  				showing_fire_station = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_fire_station){ markers_fire_station[s].setMap(null);	}
-  			} else{
-  				show_fire_station();
-  				showing_fire_station= true; // Change state app
-  			}
-  		}
-	}
-
-	// Load markets in the map
-	if (site == "farmers_markets"){
-		if (download_farmer_market == false){
-  			loading_site(url_farmers_markets, site);
-  		} else {
-  			if (showing_farmer_market == true){
-  				showing_farmer_market = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_farmer_market){
-			  		if( s!=16 ){ markers_farmer_market[s].setMap(null); }
-			  	}
-  			} else{
-  				show_farmer_market();
-  				showing_farmer_market= true; // Change state app
-  			}
-  		}
-	}
-
-	// Load libraries in the map
-	if (site == "libraries"){
-		if (download_libraries == false){
-  			loading_site(url_libraries, site);
-  		} else {
-  			if (showing_libraries == true){
-  				showing_libraries = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_libraries){ markers_libraries[s].setMap(null);	}
-  			} else{
-  				show_libraries();
-  				showing_libraries = true; // Change state app
-  			}
-  		}
-	}
-
-	// Load police station in the map
-	if (site == "police"){
-		if (download_police_station == false){
-  			loading_site(url_police_station, site);
-  		} else {
-  			if (showing_police_station == true){
-  				showing_police_station = false;  // Change state app
-  				// remover marks
-			  	for ( s in markers_police_station){ markers_police_station[s].setMap(null);	}
-  			} else{
-  				show_police_station();
-  				showing_police_station = true; // Change state app
-  			}
-  		}
+	// Load site in the map
+	if (download_site[site] == false){
+			loading_site( url_site[site], site );
+	} else {
+		if (showing_site[site] == true){
+			showing_site[site] = false;  // Change state app
+			// remover marks
+			markers_1 = markers_site[site]
+		  	for ( s in markers_1 ){
+		  		markers_site[site][s].setMap(null);	
+		  	}
+		} else{
+			show = show_site[site];
+			show();
+			showing_site[site] = true; // Change state app 
+		}
 	}
 	//console.log(site);
 }
@@ -277,9 +176,8 @@ function calculateDistance(){
 		}
 	}
 }
-
 // ------------------------------ Load site dataset --------------------------------------------------//
-function loading_site(url, name_site) {
+function loading_site(url, num_site) {
 	var xmlhttp = new XMLHttpRequest();  //create a new httprequest for this session
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
@@ -290,81 +188,48 @@ function loading_site(url, name_site) {
 	        var myArr = xmlhttp.responseText;
 	        var text = myArr;
 
-	        if (name_site == "parks") {
-	        	data_parks = JSON.parse(text);
-	       		show_parks();  // Show parks when load the data
-   	        	download_parks = true; // Change state app, this dataset is download only once.
-	        } else if (name_site == "schools"){
-	        	data_schools = JSON.parse(text);
-	        	show_schools();  // Show schools when load the data
-   	     		download_schools = true; // Change state app, this dataset is download only once.
-	        } else if (name_site == "fire_stations"){
-	        	data_fire_station= JSON.parse(text);
-	        	show_fire_station();  
-   	     		download_fire_station = true;
-	        } else if ( name_site == "farmers_markets"){
-	        	data_farmer_market= JSON.parse(text);
-	        	show_farmer_market();  
-   	     		download_farmer_market = true;
-	        } else if ( name_site == "libraries"){
-	        	data_libraries= JSON.parse(text);
-	        	show_libraries();  
-   	     		download_libraries = true;
-	        } else if ( name_site == "police"){
-	        	data_police_station = JSON.parse(text);
-	        	show_police_station();  
-   	     		download_police_station = true;
-	        } else if ( name_site == "house"){
-	        	data_house = JSON.parse(text);
-	        	show_house();  
-   	     		download_house = true;
-	        } else {
-	        	console.log("Error en loading site")
-	        }	        
+        	data_site[num_site] = JSON.parse(text);
+        	show = show_site[num_site];
+        	show();
+        	download_site[num_site] = true;
     	} 
 	}
 }
 
 // show markers parks
 function show_parks(){
-	// params (position latitude, position longitude, position name site or other date, data_set, icon)
-	markers_park = show_place_markers(27, 26, 9, data_parks, 'img/tree.png');
-	showing_parks = true; // Change state app
+	// params (position latitude, position longitude, position name site or other date, data_set, icon, site number)
+	markers_site[S_PARK] = show_place_markers(27, 26, 9, data_site[S_PARK], 'img/tree.png', S_PARK);
 }
 
 // show markers schools
 function show_schools() {
-	markers_schools = show_place_markers(17, 18, 9, data_schools, 'img/school.png' );
-	showing_schools = true; // Change state app
+	markers_site[S_SCHOOL] = show_place_markers(17, 18, 9, data_site[S_SCHOOL], 'img/school.png', S_SCHOOL );
 }
 
 // Show markers farmer market
 function show_farmer_market(){
-	markers_farmer_market = show_place_markers(18, 19, 8, data_farmer_market, 'img/market.png');
-	showing_farmer_market = true; // Change state app
+	markers_site[S_FARMER_MARKET] = show_place_markers(18, 19, 8, data_site[S_FARMER_MARKET], 'img/market.png', S_FARMER_MARKET);
 }
 
 // show markers police station
 function show_police_station() {
-	markers_police_station = show_place_markers(20, 21 , 10 , data_police_station, 'img/police.png');
-	showing_police_station = true; // Change state app
+	markers_site[S_POLICE_STATION] = show_place_markers(20, 21 , 10 , data_site[S_POLICE_STATION], 'img/police.png', S_POLICE_STATION);
 }
 
 // show markers fire station
 function show_fire_station() {
 	// params (position lat_lng, position name site or other date, data_set, icon )
-	markers_fire_station = show_place_markers_1 (14, 8, data_fire_station, 'img/fire_station.png');
-	showing_fire_station = true; // Change state app
+	markers_site[S_FIRE_STATION] = show_place_markers_1 (14, 8, data_site[S_FIRE_STATION], 'img/fire_station.png', S_FIRE_STATION);
 }
 
 // show markers libraries
 function show_libraries() {
-	markers_libraries = show_place_markers_1(18, 8, data_libraries, 'img/library.png');
-	showing_libraries = true; // Change state app
+	markers_site[S_LIBRARY] = show_place_markers_1(18, 8, data_site[S_LIBRARY], 'img/library.png', S_LIBRARY);
 }
 
 // Show markers sites
-function show_place_markers(lat, lng, name1, data_site, img_icon ) {
+function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
     sites = [];  //add markers on the map
     names = [];  // Name site or other information important 
     for(var i=0; i < data_site.data.length;  i++){
@@ -379,6 +244,7 @@ function show_place_markers(lat, lng, name1, data_site, img_icon ) {
 	    	}
 	    }
 	}
+	showing_site[num] = true;
     return sites;
 } 
 
@@ -398,14 +264,14 @@ function show_place_markers_1(lat_lng, name1, data_site, img_icon ) {
 	    	}
 	    }
 	}
+	showing_site[num] = true;
     return sites;
 } 
 
 // show markers house
 function show_house() {
     markers_house = [];  //add markers on the map
-     console.log("cantidad " + data_house.data.length);
-
+    data_house = data_site[S_HOUSE];
     for(var i=0; i < data_house.data.length;  i++){
     	var address_house = data_house.data[i][12];
     	var latLng = JSON.parse('{ "lat":'+ data_house.data[i][19] +', "lng":'+ data_house.data[i][20] +' }');
@@ -422,9 +288,7 @@ function show_house() {
 			});
 	    }
     }
-    showing_house = true; // Change state app
 } 
-
 
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
