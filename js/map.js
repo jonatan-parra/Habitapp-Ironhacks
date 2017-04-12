@@ -23,24 +23,6 @@ var rangeSlider = function(){
 
 rangeSlider();
 
-  
-var markers_house;
-function setMaxDistance(){
-	var maxDistance = document.getElementById("distance").value;
-
-	updateHomes(maxDistance);
-}
-
-function updateHomes(distance){
-	//markers_1 = markers_site[S_HOUSE]
-  	for ( s in markers_house ){
-		markers_house[s].setMap(null);	
-	}
-	console.log("Distancia maxima " +  distance); 
-	show_house(distance);
-}
-
-
 var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
@@ -49,6 +31,7 @@ var selected_house = latLngDepartament; // At the beginning there is no house se
 
 // travel mode 
 var travel_mode;
+var markers_house;
 
 var data_site = [];  // Dataset site
 var download_site = []; // Downloaded dataset (True/False)
@@ -157,16 +140,40 @@ function show_or_hide_site(site){
 	//console.log(site);
 }
 
-function calculateDistanceOfHouse(lat1,lon1,lat2,lon2){
-	//https://www.sunearthtools.com/es/tools/distance.php
-	rad = function(x) {return x*Math.PI/180;}
-	var R = 6378.137;
-	var dLat = rad( lat2 - lat1 );
-	var dLong = rad( lon2 - lon1 );
-	var a = (Math.sin(dLat/2) * Math.sin(dLat/2)) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	var d = R * c;
-	return d.toFixed(3); //Returns three decimals
+
+  
+
+function setMaxDistance(){
+	var maxDistance = document.getElementById("distance").value;
+
+	updateHomes(maxDistance-1);
+}
+
+function updateHomes(distance){
+	//markers_1 = markers_site[S_HOUSE]
+  	for ( s in markers_house ){
+		markers_house[s].setMap(null);	
+	}
+	console.log("Distancia maxima " +  distance); 
+	show_house(distance);
+}
+
+function calculateDistanceOfHouse(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d.toFixed(3);
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
 }
 
 // https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
@@ -412,6 +419,8 @@ function show_house(maxDistance=50) {
     		//console.log(distanceHouse);
     		if( distanceHouse < maxDistance ){
     			//console.log(distanceHouse);
+    			//console.log(i);
+    			console.log(distanceHouse);
 		    	markers_house[i] = new google.maps.Marker({
 						    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
 						  	});
