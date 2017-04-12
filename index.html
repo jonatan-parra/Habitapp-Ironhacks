@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/awesome-bootstrap-checkbox.css">
   
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
@@ -84,38 +85,35 @@
 
 				<div class="col-md-6">
 					<h2 title="Which places would you like to have close to where you will live">Your favorite sites</h2>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(1)"> Parks
-						</label>
-					</div>	
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(5)"> Libraries
-						</label>
+
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox1" type="checkbox" class="styled" onclick="show_or_hide_site(1)">
+						<label for="checkbox1"> Parks </label>
 					</div>	
 
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(4)"> Farmers markets
-						</label>
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox5" type="checkbox" class="styled" onclick="show_or_hide_site(5)"> 
+						<label for="checkbox5">	Libraries </label>
 					</div>	
 
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(3)"> Fire stations
-						</label>
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox4" type="checkbox" onclick="show_or_hide_site(4)"> 
+						<label for="checkbox4"> Farmers markets	</label>
 					</div>	
 
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(2)"> Schools
-						</label>
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox3" type="checkbox" onclick="show_or_hide_site(3)">
+						<label for="checkbox3"> Fire stations </label>
 					</div>	
 
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" onclick="show_or_hide_site(6)"> Police station
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox2" type="checkbox" onclick="show_or_hide_site(2)"> 
+						<label for="checkbox2"> Schools	</label>
+					</div>	
+
+					<div class="checkbox checkbox-info checkbox-circle">
+						<input id="checkbox6" type="checkbox" onclick="show_or_hide_site(6)"> 
+						<label for="checkbox6" > Police station
 						</label>
 					</div>
 
@@ -160,32 +158,26 @@
 
 				<div class="col-md-5">
 					<h2 title="Choose the mode of transport you would like to use">Your mode of transport</h2>
-					<div class="radio">
-					  <label>
-					    <input type="radio" name="options" id="options_1" value="opc_1" onClick="setTravelMode('BICYCLING')" checked>
-					    Bicycle
-					  </label>
+					<div class="radio radio-info" >
+					    <input  type="radio" name="options" id="options_1" value="opc_1" onClick="setTravelMode('BICYCLING')" checked>
+					    <label for="options_1"> Bicycle </label>
 					</div>
 
-					<div class="radio">
-					  <label> 
-					    <input type="radio" name="options" id="options_2" value="opc_2" onClick="setTravelMode('WALKING')">
-					    Walking
-					  </label>
+					<div class="radio radio-info">
+						<input type="radio" name="options" id="options_2" value="opc_2" onClick="setTravelMode('WALKING')">
+					   	<label for="options_2">  Walking </label>
 					</div>
 
-					<div class="radio">
-					  <label> 
+					<div class="radio radio-info">
+					  
 					    <input type="radio" name="options" id="options_3" value="opc_3" onClick="setTravelMode('DRIVING')">
-					    Driving
-					  </label>
+						<label for="options_3"> Driving  </label>
 					</div>
 
-					<div class="radio">
-					  <label> 
+					<div class="radio radio-info">
+					  
 					    <input type="radio" name="options" id="options_4" value="opc_4" onClick="setTravelMode('TRANSIT')">
-					    Public transit
-					  </label>
+						<label for="options_4"> Public transit </label>
 					</div>
 
 				</div>

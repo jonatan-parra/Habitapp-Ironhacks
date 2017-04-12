@@ -1,6 +1,8 @@
 // Normally, the check box remains checked when the page is loaded in firefox. This command is unchecked
 $("input:checkbox").prop('checked', false);
 
+
+// Slider 
 var rangeSlider = function(){
   var slider = $('.range-slider'),
       range = $('.range-slider__range'),
