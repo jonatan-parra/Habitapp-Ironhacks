@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+  
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
   </head>
@@ -72,7 +73,11 @@
 					<p>coming soon...</p>
 
 					<h2>Choose the maximum distance from the university</h2>
-					<input type="range" min="10" max="33" step="1" id="distance" />
+				
+					<div class="range-slider">
+					  <input class="range-slider__range" type="range" value="33" min="5" max="33" step="1" id="distance">
+					  <span class="range-slider__value">0</span>
+					</div>
 
 					<button type="button" class="btn btn-success" onclick="setMaxDistance()">Filter</button>
 				</div>
@@ -248,16 +253,20 @@
 	</footer>
 	<!-- footer-->
     
-
+	
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-   <script src="js/custom.js"></script>
-   <script src="js/data.js" type="text/javascript"></script>
+   	<script src="js/custom.js"></script>
+   	<script src="js/data.js" type="text/javascript"></script>
 	<script src="js/map.js" type="text/javascript"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBdBomiMvRuxhyD_nIyDoFCn6jFbVyDnI&callback=initApp"></script>
 
+
+
+
+ 
 
     
   </body>

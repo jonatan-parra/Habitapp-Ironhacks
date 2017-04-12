@@ -1,10 +1,31 @@
-//  Normalmente, la casilla de verificación permanece marcada al recargar la página en firefox. Con este comando está desmarcado
+// Normally, the check box remains checked when the page is loaded in firefox. This command is unchecked
 $("input:checkbox").prop('checked', false);
 
+var rangeSlider = function(){
+  var slider = $('.range-slider'),
+      range = $('.range-slider__range'),
+      value = $('.range-slider__value');
+    
+  slider.each(function(){
 
+    value.each(function(){
+      var value = $(this).prev().attr('value');
+      $(this).html(value + " km");
+    });
+
+    range.on('input', function(){
+      $(this).next(value).html(this.value + " km");
+    });
+  });
+};
+
+rangeSlider();
+
+  
 var markers_house;
 function setMaxDistance(){
 	var maxDistance = document.getElementById("distance").value;
+
 	updateHomes(maxDistance);
 }
 
@@ -388,7 +409,7 @@ function show_house(maxDistance=50) {
     		distanceHouse = calculateDistanceOfHouse(data_house.data[i][19], data_house.data[i][20], 41.8708, -87.6505);
     		//console.log(distanceHouse);
     		if( distanceHouse < maxDistance ){
-    			console.log(distanceHouse);
+    			//console.log(distanceHouse);
 		    	markers_house[i] = new google.maps.Marker({
 						    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
 						  	});
