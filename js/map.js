@@ -239,7 +239,7 @@ function calculateDistance(){
 			}
 		}
 	}
-}
+} 
 // ------------------------------ Load site dataset --------------------------------------------------//
 function loading_site(url, num_site) {
 	var xmlhttp = new XMLHttpRequest();  //create a new httprequest for this session
@@ -420,7 +420,7 @@ function show_house(maxDistance=50) {
     		if( distanceHouse < maxDistance ){
     			//console.log(distanceHouse);
     			//console.log(i);
-    			console.log(distanceHouse);
+    			//console.log(distanceHouse);
 		    	markers_house[i] = new google.maps.Marker({
 						    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
 						  	});
