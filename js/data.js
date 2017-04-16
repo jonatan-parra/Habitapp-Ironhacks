@@ -13,8 +13,9 @@ $(document).ready(function(){
 	var url = urlBaseOWM + "history/city?lat=41.85&lon=-87.65";
     url += appIdOWM;
 
+http://history.openweathermap.org/data/2.5/history/city?lat=41.85&lon=-87.65&appid=08cce1158be58f3fa256cddf9a948573
 
-
+ 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();

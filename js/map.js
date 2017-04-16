@@ -331,6 +331,19 @@ function getContentInfoWindow(num, data_site, i){
 		web_site = data_site.data[i][14][0];
 		web_site = '<a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
 		mytext = name + address + phone + web_site;
+	} else if ( num == S_HOUSE){
+		area = '<p class= "title_info_window">'+  "Community area: "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "</p> ";
+		property_type = "<strong> Property type:</strong>  " +  data_site.data[i][10] + '<br />' ;
+		property_name = "<strong> Property name:</strong>  " +  data_site.data[i][11] + '<br />' ;
+		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
+		phone =  "<strong> Phone:</strong>  " + data_site.data[i][14] + '<br />' ;
+		management_company = "<strong> Management company:</strong>  " +  data_site.data[i][15] + '<br />' ;
+		mytext = area + property_type + property_name + address + phone;
+
+		//console.log(data_site.data[i][10]);
+		//console.log(data_site.data[i][9]);
+
+
 	}
 
 	return mytext;
@@ -421,16 +434,29 @@ function show_house(maxDistance=50) {
     			//console.log(distanceHouse);
     			//console.log(i);
     			//console.log(distanceHouse);
-		    	markers_house[i] = new google.maps.Marker({
-						    	position: latLng, map: map, title: address_house, icon: 'img/home.png'
+
+    			var mytext = getContentInfoWindow(S_HOUSE, data_house, i);
+				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
+
+				// Add marker
+		    	m = new google.maps.Marker({
+						    	position: latLng, map: map, title: address_house, icon: 'img/home.png', infowindow: myinfowindow
 						  	});
 		    	
-		    	markers_house[i].addListener('click', function() {
+		    	m.addListener('click', function() {
 										new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
 										// Calculate distance
 										selected_house = new_selected_house;
 	  									calculateDistance();
 				});
+
+				// Add infoWindow
+			  	google.maps.event.addListener(m, 'click', function() {
+			      this.infowindow.open(map, this);
+			    });
+
+
+				markers_house[i] = m;
 			}
 	    }
     }
