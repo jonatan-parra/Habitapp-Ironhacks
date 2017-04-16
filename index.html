@@ -54,7 +54,7 @@
 							<p>The moment a student seeks a safe and affordable place to rent in Chicago, Habitapp appears to give you information about the best places you could find according to your tastes and priorities. This search is based on your convenience, as a mode of transport and favorite places.</p>
 						</div>
 						<div class="overlay-detail text-center">
-			               <a href="#mapSection"><i class="fa fa-angle-down"></i></a>
+			               <a href="#instructionsSection"><i class="fa fa-angle-down"></i></a>
 			             </div>		
 					</div>
 				</div>
@@ -75,7 +75,7 @@
 						<li>Select a maximum distance from university</li>
 						<li>You mark your places favorites in the map</li>
 						<ul>
-							<li>Every site have information of contact, address, phones and others</li>
+							<li>Every site have information of contact, address, phone number, website and others</li>
 							<li>Click in the icon of the site for more information</li>
 						</ul>	
 					</ol>
@@ -110,17 +110,24 @@
 
 				<div class="col-md-6">
 					
-					<h2>Choose the maximum rental price</h2>
-					<p>coming soon...</p>
+					<h2>Choose the property type</h2>
+					<select name="propertyType" id="seleccion">
+					   <option value="All" selected="selected">All</option> 
+					   <option value="Senior">Senior</option> 
+					   <option value="Multifamily">Multifamily</option>
+					</select>
+					<!-- <button type="button" class="btn btn-success" onclick="setPropertyType()">Filter</button> -->
+			
+
 
 					<h2>Choose the maximum distance from the university</h2>
 				
 					<div class="range-slider">
-					  <input class="range-slider__range" type="range" value="33" min="5" max="33" step="1" id="distance">
+					  <input class="range-slider__range" type="range" value="33" min="4" max="33" step="1" id="distance">
 					  <span class="range-slider__value">0</span>
 					</div>
 
-					<button type="button" class="btn btn-success" onclick="setMaxDistance()">Filter</button>
+					<button type="button" class="btn btn-success" onclick="setMaxDistanceAndPropertyType()">Filter</button>
 				</div>
 
 				<div class="col-md-6">

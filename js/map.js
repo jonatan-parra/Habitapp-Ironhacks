@@ -27,7 +27,8 @@ var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
-
+var propertyType = "All";
+var maxDistance = 50;
 
 // travel mode 
 var travel_mode;
@@ -82,7 +83,11 @@ function initApp(){
 	show_site[S_LIBRARY] = show_libraries;
 	show_site[S_POLICE_STATION] = show_police_station;
 
+	// init map
 	initMap();
+
+	getPriceHouse();
+	
 /* 
 {lat: 41.8708, lng: -87.6505}
 */
@@ -92,7 +97,7 @@ function initApp(){
 function initMap() {
  	map = new google.maps.Map(document.getElementById('map'), {
     	center: latLngDepartament,
-   		zoom: 14
+   		zoom: 11
   	});
 
     initialMarker = new google.maps.Marker({
@@ -143,19 +148,19 @@ function show_or_hide_site(site){
 
   
 
-function setMaxDistance(){
-	var maxDistance = document.getElementById("distance").value;
+function setMaxDistanceAndPropertyType(){
+	maxDistance = document.getElementById("distance").value - 1;
+	propertyType = document.getElementById("seleccion").value;
 
-	updateHomes(maxDistance-1);
+	updateHomes();
 }
 
-function updateHomes(distance){
-	//markers_1 = markers_site[S_HOUSE]
+function updateHomes(){
   	for ( s in markers_house ){
 		markers_house[s].setMap(null);	
 	}
-	console.log("Distancia maxima " +  distance); 
-	show_house(distance);
+	//console.log("Distancia maxima " +  distance); 
+	show_house(maxDistance);
 }
 
 function calculateDistanceOfHouse(lat1, lon1, lat2, lon2) {
@@ -421,7 +426,7 @@ function show_place_markers_1(lat_lng, name1, data_site, img_icon, num ) {
 } 
 
 // show markers house
-function show_house(maxDistance=50) {
+function show_house( maxDistance=50 ) {
     markers_house = [];  //add markers on the map
     data_house = data_site[S_HOUSE];
     for(var i=0; i < data_house.data.length;  i++){
@@ -430,7 +435,8 @@ function show_house(maxDistance=50) {
     	if (data_house.data[i][19] != null){
     		distanceHouse = calculateDistanceOfHouse(data_house.data[i][19], data_house.data[i][20], 41.8708, -87.6505);
     		//console.log(distanceHouse);
-    		if( distanceHouse < maxDistance ){
+    		//condition_property_type = propertyType ==  "all";
+    		if( distanceHouse < maxDistance && (propertyType == "All" || propertyType == data_house.data[i][10] )  ){
     			//console.log(distanceHouse);
     			//console.log(i);
     			//console.log(distanceHouse);
@@ -464,6 +470,108 @@ function show_house(maxDistance=50) {
     return markers_house;
 } 
 
+function getPriceHouse(){
+//http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz199ggom3y17_7ucak&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA&rentzestimate=true
+	api_zillow = "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id="
+	id_zillow  =  "X1-ZWz199ggom3y17_7ucak";
+	params_zillow = "&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA&rentzestimate=true";
+	url = api_zillow + id_zillow + params_zillow;
+
+	//var url = {some url of data.gov dataset}
+/*	$.ajax({
+	  url: url
+		}).done(function(data){
+			console.log("Funcionó");
+		}).fail(function(error){
+			console.log("Error");
+		})
+*//*
+console.log("sasdf");
+	var invocation = new XMLHttpRequest();
+	//var url = 'http://bar.other/resources/public-data/';
+	//console.log(invocation);
+	
+	 // if(invocation) {    
+	 	
+	    invocation.open('GET', url, true);
+	    //invocation.onreadystatechange = handler;
+	 	invocation.onreadystatechange = function() {
+		    if (invocation.readyState == 4 && xmlhttp.status == 200) {
+		        var myArr = invocation.responseText;
+		        var text = myArr;
+		        console.log('funciono');
+		    }
+		}
+	    invocation.send(); 
+
+	    //console.log('entrooo');
+	  //}
+
+*/	
+
+	var xmlhttp = new XMLHttpRequest();  //create a new httprequest for this session
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+
+	//once the request is accepted, process the fowllowing function to get data and complete the app information
+	xmlhttp.onreadystatechange = function() {
+	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	        var myArr = xmlhttp.responseText;
+	        var text = myArr;
+	        console.log('funciono');
+
+        	/*data_site[num_site] = JSON.parse(text);
+        	show = show_site[num_site];
+        	show();
+        	download_site[num_site] = true;*/
+    	} 
+	}
+
+/*	console.log("Entrando a getPrice");
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.open('GET', url, true);
+	httpRequest.setRequestHeader( 'Access-Control-Allow-Origin', '*');
+	//httpRequest.setRequestHeader( 'Content-Type', 'application/json' );
+	httpRequest.onerror = function(XMLHttpRequest, textStatus, errorThrown) {
+	  console.log( 'The data failed to load :(' );
+	  //console.log(JSON.stringify(XMLHttpRequest));
+	};
+	httpRequest.onload = function() {
+	  console.log('SUCCESS!');
+	}
+*/
+
+
+//http://stackoverflow.com/questions/25316393/keep-getting-no-access-control-allow-origin-error-with-xmlhttprequest
+//http://stackoverflow.com/questions/28547288/no-access-control-allow-origin-header-is-present-on-the-requested-resource-err
+/*	$.ajax({
+		url: url, //"https://www.ncdc.noaa.gov/cdo-web/api/v2/datasets/GSOY",
+		data: { },
+		headers:{ token: id_zillow, 'Access-Control-Allow-Origin': '*' } 
+		
+	}).done(function(data){
+		//$('#result').text('The name is: ' + data.name)
+		console.log(data)
+	}).fail(function(jqXHR, textStatus, errorThrown){
+		console.log('Fail');
+	})
+*/
+/*
+	var dataSetJsonObject;
+	$.get(url, function( response ){
+		//here you can handle the response as a json object.
+		dataSetJsonObject = response;
+		
+		console.log(dataSetJson);
+
+	}, "json");
+	
+	//log the respones if you want;
+	*/
+
+}
+
+
 function setTravelMode(new_mode){
 	this.travel_mode = new_mode;
 	calculateDistance();
@@ -473,3 +581,5 @@ function getTravelMode(){
 	return this.travel_mode;
 }
 
+
+ 
