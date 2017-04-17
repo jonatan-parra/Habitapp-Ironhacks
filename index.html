@@ -185,11 +185,9 @@
 
 					<p>Distance from the university to your home using this mode of transport:<span id="distanceUniversity"></span></p>
 
-					<p>Time to get to university from home: <span id="timeArrive"></span></p>			
+					<p>Time to get to university from home: <span id="timeArrive"></span></p>
 
-				</div>
 
-				<div class="col-md-5">
 					<h2 title="Choose the mode of transport you would like to use">Select your mode of transport</h2>
 					<div class="radio radio-info" >
 					    <input  type="radio" name="options" id="options_1" value="opc_1" onClick="setTravelMode('BICYCLING')" checked>
@@ -211,12 +209,28 @@
 					  
 					    <input type="radio" name="options" id="options_4" value="opc_4" onClick="setTravelMode('TRANSIT')">
 						<label for="options_4"> Public transit </label>
-					</div>
+					</div>			
+
+				</div>
+
+				<div class="col-md-5">
+					<h2>Security information </h2>
+
+					<p>Do you want to know the areas where there are the most crimes in the last six month?</p>
+					<p>Press the button to show or hide the heat map</p>
+
+					<input class="btn btn-primary" type="button" id="security" value="Toogle heat map">
 
 				</div>
 			</div>
 
 			<div class="row">
+
+				<div class="col-md-6">
+
+				</div>
+
+
 				<div class="col-md-6">
 										
 					<!-- <p>Security statistics... in implementation</p>
@@ -306,7 +320,7 @@
    	<script src="js/data.js" type="text/javascript"></script>
 	<script src="js/map.js" type="text/javascript"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBdBomiMvRuxhyD_nIyDoFCn6jFbVyDnI&callback=initApp"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBdBomiMvRuxhyD_nIyDoFCn6jFbVyDnI&callback=initApp&libraries=visualization"></script>
     
   </body>
 </html>
