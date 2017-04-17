@@ -100,13 +100,62 @@ function initApp(){
 
 	//getPriceHouse();
 
-
+	// Crime data is uploaded 
 	crimesMap();
+
+
+}
+
+// http://c3js.org/samples/pie_label_format.html
+function addGraphCrimes(){
 	
-/* 
-{lat: 41.8708, lng: -87.6505}
-*/
-	//console.log(distancia(41.8708, -87.6505, 42.8708, -87.6888));
+	var jsonData = [
+	    {name: 'site1', upload: 200},
+	    {name: 'site2', upload: 1000},
+	    {name: 'site3', upload: 300},
+	    {name: 'site4', upload: 1000},
+	    {name: 'site5', upload: 300},
+	    {name: 'site6', upload: 1000},
+	    {name: 'site7', upload: 300},
+	    {name: 'site8', upload: 1000},
+	    {name: 'site9', upload: 300},
+	    {name: 'site10', upload: 400}
+
+	]
+
+	var data = {};
+	var sites = [];
+	/*jsonData.forEach(function(e) {
+	    sites.push(e.name);
+	    data[e.name] = e.upload;
+	})*/
+	//console.log(number_crimes_by_district);
+	for(var i=1; i < number_crimes_by_district.length-13; i++) {
+	    sites.push("District "+i);
+	    data["District "+i] = +number_crimes_by_district[i];
+	} 
+
+	//console.log(jsonData);
+	console.log(data);
+	console.log(sites); 
+
+	chart = c3.generate({
+		bindto: '#securityInTheDistrict',		
+	    data: {
+	        json: [ data ],
+	        keys: {
+	            value: sites,
+	        },
+	        type:'pie'
+	    },
+	    pie: {
+      		label: {
+            	format: function (value, ratio, id) {
+                	return d3.format('')(value);
+            	}
+        	}
+    	}
+	});
 }
 
 function initMap() {
@@ -127,7 +176,7 @@ function initMap() {
   	google.maps.event.addListener(initialMarker, 'click', function() {
       infowindow.setContent(content_1);
       infowindow.open(map, initialMarker);
-    });
+    });;
 
   	// Load house
   	loading_site(url_site[S_HOUSE], S_HOUSE);
@@ -500,12 +549,16 @@ function crimesMap(){
 			number_crimes_by_district[+node.district] += 1;
 		}
 
-		console.log(number_crimes_by_district);
+		//console.log(number_crimes_by_district);
 
 		heatmap = new google.maps.visualization.HeatmapLayer({
 			data: crimes_lat_lon
 		});
-		heatmap.set('radius',20);
+		heatmap.set('radius', 25);
+
+		// Add graphic
+		addGraphCrimes();
+		
 		//heatmap.setMap(map);
 	}).fail(function(error){
 			console.log(error);
