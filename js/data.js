@@ -1,4 +1,4 @@
-$(document).ready(function(){
+/*$(document).ready(function(){
 	$('#buscar').click(function(event) {
 
 
@@ -13,7 +13,7 @@ $(document).ready(function(){
 	var url = urlBaseOWM + "history/city?lat=41.85&lon=-87.65";
     url += appIdOWM;
 
-http://history.openweathermap.org/data/2.5/history/city?lat=41.85&lon=-87.65&appid=08cce1158be58f3fa256cddf9a948573
+//http://history.openweathermap.org/data/2.5/history/city?lat=41.85&lon=-87.65&appid=08cce1158be58f3fa256cddf9a948573
 
  
     var xmlhttp = new XMLHttpRequest();
@@ -29,9 +29,9 @@ http://history.openweathermap.org/data/2.5/history/city?lat=41.85&lon=-87.65&app
             fahrenheit ?
                 $("#weatherDayMaxMin").text(covertToFahrenheit(json.main.temp_min) + "º | " + covertToFahrenheit(json.main.temp_max) + "º F") :
                 $("#weatherDayMaxMin").text(covertToCelcius(json.main.temp_min) + "º | " + covertToCelcius(json.main.temp_max) + "º C");*/
-        }
+       /* }
     };
-
+/*
 	   
    //http://history.openweathermap.org/data/2.5/history/city?q={city ID},{country code}&type=hour&start={start}&end={end}
 //http://history.openweathermap.org/data/2.5/history/city?lat={lat}&lon={lon}&type=hour&start={start}&end={end}
@@ -74,15 +74,15 @@ http://history.openweathermap.org/data/2.5/history/city?lat=41.85&lon=-87.65&app
 		}).fail(function(jqXHR, textStatus, errorThrown){
 			console.log('Fail');
 		})*/
-	});
+/*	});
 
 	/* Function that show symbol loading before of every ajax*/
-	function loadingSymbol(id1){
+/*	function loadingSymbol(id1){
 		$(id1).html('<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> <span class="sr-only">Loading...</span>')
 	}
 
 });
 
-
+*/
 //http://openweathermap.org/history 
 // http://www.unixtimestamp.com/index.php
