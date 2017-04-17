@@ -23,12 +23,20 @@ var rangeSlider = function(){
 
 rangeSlider();
 
+
+
+
 var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
 var propertyType = "All";
 var maxDistance = 50;
+
+var crimes_lat_lon = [];
+var number_crimes_by_district = [];
+var num_police_districts = 25;
+var heatmap;
 
 // travel mode 
 var travel_mode;
@@ -75,6 +83,10 @@ function initApp(){
 		download_site[i] = false;
 	}
 
+	for (var i = 0; i <= num_police_districts; i++ ){
+		number_crimes_by_district[i] = 0;
+	}
+
 	show_site[S_PARK] = show_parks;
 	show_site[S_HOUSE] = show_house;
 	show_site[S_SCHOOL] = show_schools;
@@ -86,7 +98,10 @@ function initApp(){
 	// init map
 	initMap();
 
-	getPriceHouse();
+	//getPriceHouse();
+
+
+	crimesMap();
 	
 /* 
 {lat: 41.8708, lng: -87.6505}
@@ -354,11 +369,6 @@ function getContentInfoWindow(num, data_site, i){
 	return mytext;
 }
 
-
-
-
-
-
 // Show markers sites
 function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
     sites = [];  //add markers on the map
@@ -469,6 +479,43 @@ function show_house( maxDistance=50 ) {
     showing_site[S_HOUSE] = true;
     return markers_house;
 } 
+
+
+// https://dev.socrata.com/foundry/data.cityofchicago.org/6zsd-86xi
+//https://catalog.data.gov/dataset/crimes-2001-to-present-398a4
+function crimesMap(){
+	$.ajax({
+		url: "https://data.cityofchicago.org/resource/kf95-mnd6.json",
+		type: "GET",
+		data: {
+			"$limit" : 1000,
+			"$where" : "latitude > 0 AND date > '2016-05-01T12:00:00' ",
+			"$$app_token" : "cErFgNp5cFTsCbkEzqrYKWuIL"
+		}
+	}).done(function(data){
+		for (pos = 0; pos < data.length; pos++){ 
+			var node = data[pos];
+			var crime = new google.maps.LatLng(node.latitude, node.longitude);
+			crimes_lat_lon.push(crime);
+			number_crimes_by_district[+node.district] += 1;
+		}
+
+		console.log(number_crimes_by_district);
+
+		heatmap = new google.maps.visualization.HeatmapLayer({
+			data: crimes_lat_lon
+		});
+		heatmap.set('radius',20);
+		//heatmap.setMap(map);
+	}).fail(function(error){
+			console.log(error);
+		});
+}
+
+// Show or hide heatmap
+$('#security').click(function(event) {
+	heatmap.setMap(heatmap.getMap() ? null : map);
+});
 
 function getPriceHouse(){
 //http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz199ggom3y17_7ucak&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA&rentzestimate=true
