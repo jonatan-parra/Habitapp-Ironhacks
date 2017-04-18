@@ -109,27 +109,12 @@ function initApp(){
 // http://c3js.org/samples/pie_label_format.html
 function addGraphCrimes(){
 	
-	var jsonData = [
-	    {name: 'site1', upload: 200},
-	    {name: 'site2', upload: 1000},
-	    {name: 'site3', upload: 300},
-	    {name: 'site4', upload: 1000},
-	    {name: 'site5', upload: 300},
-	    {name: 'site6', upload: 1000},
-	    {name: 'site7', upload: 300},
-	    {name: 'site8', upload: 1000},
-	    {name: 'site9', upload: 300},
-	    {name: 'site10', upload: 400}
-
-	]
-
-	var data = {};
+    var data = {};
 	var sites = [];
 	/*jsonData.forEach(function(e) {
 	    sites.push(e.name);
 	    data[e.name] = e.upload;
 	})*/
-	//console.log(number_crimes_by_district);
 	for(var i=1; i < number_crimes_by_district.length-13; i++) {
 	    sites.push("District "+i);
 	    data["District "+i] = +number_crimes_by_district[i];
@@ -140,7 +125,7 @@ function addGraphCrimes(){
 	console.log(sites); 
 
 	chart = c3.generate({
-		bindto: '#securityInTheDistrict',		
+		bindto: '#securityInTheDistrict_1',		
 	    data: {
 	        json: [ data ],
 	        keys: {
@@ -156,6 +141,43 @@ function addGraphCrimes(){
         	}
     	}
 	});
+
+
+
+    var data = {};
+	var sites = [];
+	/*jsonData.forEach(function(e) {
+	    sites.push(e.name);
+	    data[e.name] = e.upload;
+	})*/
+	for(var i=13; i < number_crimes_by_district.length; i++) {
+	    sites.push("District "+i);
+	    data["District "+i] = +number_crimes_by_district[i];
+	} 
+
+	//console.log(jsonData);
+	console.log(data);
+	console.log(sites); 
+
+	chart = c3.generate({
+		bindto: '#securityInTheDistrict_2',		
+	    data: {
+	        json: [ data ],
+	        keys: {
+	            value: sites,
+	        },
+	        type:'pie'
+	    },
+	    pie: {
+      		label: {
+            	format: function (value, ratio, id) {
+                	return d3.format('')(value);
+            	}
+        	}
+    	}
+	});
+
+
 }
 
 function initMap() {
