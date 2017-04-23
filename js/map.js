@@ -30,6 +30,7 @@ var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
+var select_house_in_map; // House selected by the user
 var propertyType = "All";
 var maxDistance = 50;
 
@@ -127,11 +128,6 @@ function addGraphCrimes(){
 	    sites.push("District "+i);
 	    data["District "+i] = +number_crimes_by_district[i];
 	} 
-
-	//console.log(jsonData);
-	console.log(data);
-	console.log(sites); 
-
 	chart = c3.generate({
 		bindto: '#securityInTheDistrict_1',		
 	    data: {
@@ -150,22 +146,13 @@ function addGraphCrimes(){
     	}
 	});
 
-
-
     var data = {};
 	var sites = [];
-	/*jsonData.forEach(function(e) {
-	    sites.push(e.name);
-	    data[e.name] = e.upload;
-	})*/
+
 	for(var i=13; i < number_crimes_by_district.length; i++) {
 	    sites.push("District "+i);
 	    data["District "+i] = +number_crimes_by_district[i];
 	} 
-
-	//console.log(jsonData);
-	console.log(data);
-	console.log(sites); 
 
 	chart = c3.generate({
 		bindto: '#securityInTheDistrict_2',		
@@ -184,8 +171,6 @@ function addGraphCrimes(){
         	}
     	}
 	});
-
-
 }
 
 function initMap() {
@@ -306,6 +291,7 @@ function calculateDistance(){
 		if (status == google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;
 			var destinations = response.destinationAddresses;
+			console.log(select_house_in_map.address_house);
 
 			for (var i = 0; i < origins.length; i++) {
 			    var results = response.rows[i].elements;
@@ -318,7 +304,8 @@ function calculateDistance(){
 
 				    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
 				    $('#timeArrive').html('<strong>' + duration + '</strong>');
-				    $('#homeUbicacion').html('<strong>' + to + '</strong>');
+				    //$('#homeUbicacion').html('<strong>' + to + '</strong>');
+				    $('#homeUbicacion').html('<strong>' + select_house_in_map.address_house + '</strong>');
 
 				   	var travel1 = getTravelMode();
 				   	var modeName = "No valid";
@@ -455,18 +442,15 @@ function getContentInfoWindow(num, data_site, i){
 		general = "<strong> general:</strong>  " +  data_site.data[i][17] + '<br />' ;
 		mytext = name + address + size + meat + general;
 	} else if ( num == S_HOUSE){
-		area = '<p class= "title_info_window">'+  "Community area: "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "</p> ";
+		address = '<p class= "title_info_window"> Address: ' +  data_site.data[i][12] + ' </p>' ;
+		units =  " <strong> Price in units: </strong> "+ '$' + data_site.data[i][16] +  "<br /> "; 
+		message = "  For information on rents, contact each property directly.<br />" ;
+		area =  " <strong> Community area: </strong> "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "<br /> ";
 		property_type = "<strong> Property type:</strong>  " +  data_site.data[i][10] + '<br />' ;
 		property_name = "<strong> Property name:</strong>  " +  data_site.data[i][11] + '<br />' ;
-		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
 		phone =  "<strong> Phone:</strong>  " + data_site.data[i][14] + '<br />' ;
 		management_company = "<strong> Management company:</strong>  " +  data_site.data[i][15] + '<br />' ;
-		mytext = area + property_type + property_name + address + phone;
-
-		//console.log(data_site.data[i][10]);
-		//console.log(data_site.data[i][9]);
-
-
+		mytext = address + units + message + area + property_type + property_name + phone;
 	}
 
 	return mytext;
@@ -548,19 +532,14 @@ function show_house( maxDistance=50 ) {
     	var latLng = JSON.parse('{ "lat":'+ data_house.data[i][19] +', "lng":'+ data_house.data[i][20] +' }');
     	if (data_house.data[i][19] != null){
     		distanceHouse = calculateDistanceOfHouse(data_house.data[i][19], data_house.data[i][20], 41.8708, -87.6505);
-    		//console.log(distanceHouse);
-    		//condition_property_type = propertyType ==  "all";
     		if( distanceHouse < maxDistance && (propertyType == "All" || propertyType == data_house.data[i][10] )  ){
-    			//console.log(distanceHouse);
-    			//console.log(i);
-    			//console.log(distanceHouse);
-
     			var mytext = getContentInfoWindow(S_HOUSE, data_house, i);
 				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
 
 				// Add marker
 		    	m = new google.maps.Marker({
-						    	position: latLng, map: map, title: address_house, icon: 'img/home.png', infowindow: myinfowindow
+						    	position: latLng, map: map, title: address_house, icon: 'img/home.png', 
+						    	infowindow: myinfowindow, address_house: data_house.data[i][12]
 						  	});
 		    	
 		    	m.addListener('click', function() {
@@ -568,6 +547,7 @@ function show_house( maxDistance=50 ) {
 										// Calculate distance
 										selected_house = new_selected_house;
 	  									calculateDistance();
+	  									select_house_in_map = this;
 				});
 
 				// Add infoWindow
