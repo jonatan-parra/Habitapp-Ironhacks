@@ -30,6 +30,7 @@ var map; // Access global
 var initialMarker; 
 var latLngDepartament = {lat: 41.8708, lng: -87.6505};  // Location of the departament
 var selected_house = latLngDepartament; // At the beginning there is no house selected
+var select_house_in_map; // House selected by the user
 var propertyType = "All";
 var maxDistance = 50;
 
@@ -56,7 +57,9 @@ var S_FIRE_STATION = 3;
 var S_FARMER_MARKET = 4;
 var S_LIBRARY = 5;
 var S_POLICE_STATION = 6;
-var number_of_sites = 6;
+var S_GROCERY_STORE_CHAINS = 7;
+var S_INDEPENDENT_STORES = 8;
+var number_of_sites = 8;
 
 // URl Datasets
 var url_site = [];
@@ -67,7 +70,11 @@ url_site[S_FIRE_STATION] = "https://data.cityofchicago.org/api/views/28km-gtjn/r
 url_site[S_FARMER_MARKET] = "https://data.cityofchicago.org/api/views/x5xx-pszi/rows.json?accessType=DOWNLOAD";
 url_site[S_LIBRARY] = "https://data.cityofchicago.org/api/views/x8fc-8rcq/rows.json?accessType=DOWNLOAD";
 url_site[S_POLICE_STATION] = "https://data.cityofchicago.org/api/views/z8bn-74gv/rows.json?accessType=DOWNLOAD";
+url_site[S_GROCERY_STORE_CHAINS] = "https://data.cityofchicago.org/api/views/wryv-d7zf/rows.json?accessType=DOWNLOAD";
+url_site[S_INDEPENDENT_STORES] = "https://data.cityofchicago.org/api/views/ddxq-pdr6/rows.json?accessType=DOWNLOAD";
 
+// Grocery store chains https://catalog.data.gov/dataset/nearby-cook-county-grocery-store-chains-cc102
+// independent https://catalog.data.gov/dataset/nearby-independent-cook-county-grocery-stores-180c9
 
 // var dataset house
 var data_house;  // JSON house
@@ -94,6 +101,8 @@ function initApp(){
 	show_site[S_FARMER_MARKET] = show_farmer_market;
 	show_site[S_LIBRARY] = show_libraries;
 	show_site[S_POLICE_STATION] = show_police_station;
+	show_site[S_GROCERY_STORE_CHAINS] = show_grocery_store_chains;
+	show_site[S_INDEPENDENT_STORES] = show_independent_stores;
 
 	// init map
 	initMap();
@@ -119,11 +128,6 @@ function addGraphCrimes(){
 	    sites.push("District "+i);
 	    data["District "+i] = +number_crimes_by_district[i];
 	} 
-
-	//console.log(jsonData);
-	console.log(data);
-	console.log(sites); 
-
 	chart = c3.generate({
 		bindto: '#securityInTheDistrict_1',		
 	    data: {
@@ -142,22 +146,13 @@ function addGraphCrimes(){
     	}
 	});
 
-
-
     var data = {};
 	var sites = [];
-	/*jsonData.forEach(function(e) {
-	    sites.push(e.name);
-	    data[e.name] = e.upload;
-	})*/
+
 	for(var i=13; i < number_crimes_by_district.length; i++) {
 	    sites.push("District "+i);
 	    data["District "+i] = +number_crimes_by_district[i];
 	} 
-
-	//console.log(jsonData);
-	console.log(data);
-	console.log(sites); 
 
 	chart = c3.generate({
 		bindto: '#securityInTheDistrict_2',		
@@ -176,8 +171,6 @@ function addGraphCrimes(){
         	}
     	}
 	});
-
-
 }
 
 function initMap() {
@@ -245,9 +238,29 @@ function updateHomes(){
   	for ( s in markers_house ){
 		markers_house[s].setMap(null);	
 	}
-	//console.log("Distancia maxima " +  distance); 
+
 	show_house(maxDistance);
 }
+
+var previous_house = null;
+
+function changeIconHouse(){
+	if (previous_house != null){
+		m1 = previous_house;
+		markers_house[m1.number_house].setMap(null);
+	    markers_house[m1.number_house] = create_marker_house(m1.position, m1.address_house, 'img/home.png', m1.infowindow, m1.address_house, m1.number_house);
+		
+	} else {
+		console.log("Entro al else");
+	}
+	// Save previous house
+	previous_house = select_house_in_map;
+
+	m1 = select_house_in_map;
+	markers_house[m1.number_house].setMap(null);
+	markers_house[m1.number_house] = create_marker_house(m1.position, m1.address_house, 'img/home2.png', m1.infowindow, m1.address_house, m1.number_house);
+}
+
 
 function calculateDistanceOfHouse(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
@@ -298,6 +311,7 @@ function calculateDistance(){
 		if (status == google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;
 			var destinations = response.destinationAddresses;
+			console.log(select_house_in_map.address_house);
 
 			for (var i = 0; i < origins.length; i++) {
 			    var results = response.rows[i].elements;
@@ -310,7 +324,8 @@ function calculateDistance(){
 
 				    $('#distanceUniversity').html('<strong>' + distance + '</strong>');
 				    $('#timeArrive').html('<strong>' + duration + '</strong>');
-				    $('#homeUbicacion').html('<strong>' + to + '</strong>');
+				    //$('#homeUbicacion').html('<strong>' + to + '</strong>');
+				    $('#homeUbicacion').html('<strong>' + select_house_in_map.address_house + '</strong>');
 
 				   	var travel1 = getTravelMode();
 				   	var modeName = "No valid";
@@ -383,6 +398,18 @@ function show_libraries() {
 	markers_site[S_LIBRARY] = show_place_markers_1(18, 8, data_site[S_LIBRARY], 'img/library.png', S_LIBRARY);
 }
 
+// Show marker grocery store chains
+function show_grocery_store_chains() {
+	markers_site[S_GROCERY_STORE_CHAINS] = show_place_markers_1(14 , 8 , data_site[S_GROCERY_STORE_CHAINS], 'img/store_chain.png', S_GROCERY_STORE_CHAINS);
+}
+
+
+// Show marker independent stores
+function show_independent_stores() {
+	markers_site[S_INDEPENDENT_STORES] = show_place_markers_1(30, 8 , data_site[S_INDEPENDENT_STORES], 'img/independent_store.png', S_INDEPENDENT_STORES);
+}
+
+
 function getContentInfoWindow(num, data_site, i){
 	var mytext = "Text no edited";
 	if ( num == S_FARMER_MARKET ){
@@ -410,7 +437,7 @@ function getContentInfoWindow(num, data_site, i){
 		address = "<strong> Address:</strong>  " +  data_site.data[i][9] + '<br />' ;
 		mytext = name + address;
 	} else if ( num == S_SCHOOL ) {
-		name = '<p class= "title_info_window">'+ data_site.data[i][9] + "</p> ";
+		name = '<p class= "title_info_window"> Name: '+ data_site.data[i][9] + "</p> ";
 		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
 		grades = "<strong> Grades:</strong>  " +  data_site.data[i][16] + '<br />' ;
 		phone =  "<strong> Phone:</strong>  " + data_site.data[i][19] + '<br />' ;
@@ -422,19 +449,28 @@ function getContentInfoWindow(num, data_site, i){
 		web_site = data_site.data[i][14][0];
 		web_site = '<a href="' + web_site + '"  target="_blank" > ' + web_site + '</a>'
 		mytext = name + address + phone + web_site;
+	} else if ( num == S_GROCERY_STORE_CHAINS){
+		company = '<p class= "title_info_window">'+  "Company: "+ data_site.data[i][8] + "</p> ";	
+		store_type = "<strong> Store type:</strong>  " +  data_site.data[i][9] + '<br />' ;
+		address = "<strong> Address:</strong>  " +  data_site.data[i][10] + '<br />' ;		
+		mytext = company + store_type + address;
+	} else if (num == S_INDEPENDENT_STORES) {
+		name = '<p class= "title_info_window"> Name: '+ data_site.data[i][8] + "</p> ";
+		address = "<strong> Address:</strong>  " +  data_site.data[i][9] + '<br />' ;
+		size = "<strong> Store type:</strong>  " +  data_site.data[i][13] + '<br />' ;
+		meat = "<strong> meat:</strong>  " +  data_site.data[i][16] + '<br />' ;
+		general = "<strong> general:</strong>  " +  data_site.data[i][17] + '<br />' ;
+		mytext = name + address + size + meat + general;
 	} else if ( num == S_HOUSE){
-		area = '<p class= "title_info_window">'+  "Community area: "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "</p> ";
+		address = '<p class= "title_info_window"> Address: ' +  data_site.data[i][12] + ' </p>' ;
+		units =  " <strong> Price in units: </strong> "+ '$' + data_site.data[i][16] +  "<br /> "; 
+		message = "  For information on rents, contact each property directly.<br />" ;
+		area =  " <strong> Community area: </strong> "+ data_site.data[i][8] + ", "+ data_site.data[i][9] + "<br /> ";
 		property_type = "<strong> Property type:</strong>  " +  data_site.data[i][10] + '<br />' ;
 		property_name = "<strong> Property name:</strong>  " +  data_site.data[i][11] + '<br />' ;
-		address = "<strong> Address:</strong>  " +  data_site.data[i][12] + '<br />' ;
 		phone =  "<strong> Phone:</strong>  " + data_site.data[i][14] + '<br />' ;
 		management_company = "<strong> Management company:</strong>  " +  data_site.data[i][15] + '<br />' ;
-		mytext = area + property_type + property_name + address + phone;
-
-		//console.log(data_site.data[i][10]);
-		//console.log(data_site.data[i][9]);
-
-
+		mytext = address + units + message + area + property_type + property_name + phone;
 	}
 
 	return mytext;
@@ -445,6 +481,7 @@ function show_place_markers(lat, lng, name1, data_site, img_icon, num ) {
     sites = [];  //add markers on the map
     names = [];  // Name site or other information important 
     for(var i=0; i < data_site.data.length;  i++){
+
     	var latLng = JSON.parse('{ "lat":'+ data_site.data[i][lat] +', "lng":'+ data_site.data[i][lng] +' }');
       	var name = data_site.data[i][name1];
 	    if (data_site.data[i][lat] != null ){ // Verify that the latitude in the dataset is valid
@@ -515,34 +552,13 @@ function show_house( maxDistance=50 ) {
     	var latLng = JSON.parse('{ "lat":'+ data_house.data[i][19] +', "lng":'+ data_house.data[i][20] +' }');
     	if (data_house.data[i][19] != null){
     		distanceHouse = calculateDistanceOfHouse(data_house.data[i][19], data_house.data[i][20], 41.8708, -87.6505);
-    		//console.log(distanceHouse);
-    		//condition_property_type = propertyType ==  "all";
     		if( distanceHouse < maxDistance && (propertyType == "All" || propertyType == data_house.data[i][10] )  ){
-    			//console.log(distanceHouse);
-    			//console.log(i);
-    			//console.log(distanceHouse);
-
     			var mytext = getContentInfoWindow(S_HOUSE, data_house, i);
 				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
 
 				// Add marker
-		    	m = new google.maps.Marker({
-						    	position: latLng, map: map, title: address_house, icon: 'img/home.png', infowindow: myinfowindow
-						  	});
+		    	m = create_marker_house(latLng, address_house, 'img/home.png', myinfowindow, data_house.data[i][12], i);
 		    	
-		    	m.addListener('click', function() {
-										new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
-										// Calculate distance
-										selected_house = new_selected_house;
-	  									calculateDistance();
-				});
-
-				// Add infoWindow
-			  	google.maps.event.addListener(m, 'click', function() {
-			      this.infowindow.open(map, this);
-			    });
-
-
 				markers_house[i] = m;
 			}
 	    }
@@ -550,6 +566,29 @@ function show_house( maxDistance=50 ) {
     showing_site[S_HOUSE] = true;
     return markers_house;
 } 
+
+function create_marker_house(latLng, address_house, icon, myinfowindow, address, i){
+	m = new google.maps.Marker({
+		position: latLng, map: map, title: address_house, icon: icon, 
+		infowindow: myinfowindow, address_house: address, number_house: i
+	});
+	
+	m.addListener('click', function() {
+		new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
+		
+		selected_house = new_selected_house;
+		calculateDistance();
+		select_house_in_map = this;
+		changeIconHouse()
+	});
+
+	// Add infoWindow
+	google.maps.event.addListener(m, 'click', function() {
+		this.infowindow.open(map, this);
+	});
+
+	return m
+}
 
 
 // https://dev.socrata.com/foundry/data.cityofchicago.org/6zsd-86xi
