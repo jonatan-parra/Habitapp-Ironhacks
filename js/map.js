@@ -116,64 +116,6 @@ function initApp(){
 
 }
 
-// http://c3js.org/samples/pie_label_format.html
-function addGraphCrimes(){
-	
-    var data = {};
-	var sites = [];
-	/*jsonData.forEach(function(e) {
-	    sites.push(e.name);
-	    data[e.name] = e.upload;
-	})*/
-	for(var i=1; i < number_crimes_by_district.length-13; i++) {
-	    sites.push("District "+i);
-	    data["District "+i] = +number_crimes_by_district[i];
-	} 
-	chart = c3.generate({
-		bindto: '#securityInTheDistrict_1',		
-	    data: {
-	        json: [ data ],
-	        keys: {
-	            value: sites,
-	        },
-	        type:'pie'
-	    },
-	    pie: {
-      		label: {
-            	format: function (value, ratio, id) {
-                	return d3.format('')(value);
-            	}
-        	}
-    	}
-	});
-
-    var data = {};
-	var sites = [];
-
-	for(var i=13; i < number_crimes_by_district.length; i++) {
-	    sites.push("District "+i);
-	    data["District "+i] = +number_crimes_by_district[i];
-	} 
-
-	chart = c3.generate({
-		bindto: '#securityInTheDistrict_2',		
-	    data: {
-	        json: [ data ],
-	        keys: {
-	            value: sites,
-	        },
-	        type:'pie'
-	    },
-	    pie: {
-      		label: {
-            	format: function (value, ratio, id) {
-                	return d3.format('')(value);
-            	}
-        	}
-    	}
-	});
-}
-
 function initMap() {
  	map = new google.maps.Map(document.getElementById('map'), {
     	center: latLngDepartament,
@@ -299,7 +241,6 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-// https://developers.google.com/maps/documentation/javascript/distancematrix#travel_modes
 function calculateDistance(){  
 	//travel_modes
 	var bicycling;
@@ -477,9 +418,7 @@ function getContentInfoWindow(num, data_site, i){
 		name = '<p class= "title_info_window"> Name: '+ data_site.data[i][8] + "</p> ";
 		address = "<strong> Address:</strong>  " +  data_site.data[i][9] + '<br />' ;
 		size = "<strong> Store type:</strong>  " +  data_site.data[i][13] + '<br />' ;
-		meat = "<strong> meat:</strong>  " +  data_site.data[i][16] + '<br />' ;
-		general = "<strong> general:</strong>  " +  data_site.data[i][17] + '<br />' ;
-		mytext = name + address + size + meat + general;
+		mytext = name + address + size;
 	} else if ( num == S_HOUSE){
 		address = '<p class= "title_info_window"> Address: ' +  data_site.data[i][12] + ' </p>' ;
 		units =  " <strong> Price in units: </strong> "+ '$' + data_site.data[i][16] +  "<br /> "; 
