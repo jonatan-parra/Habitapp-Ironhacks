@@ -35,6 +35,7 @@ var propertyType = "All";
 var maxDistance = 50;
 
 var crimes_lat_lon = [];
+var crimes_lat_lon_2 = []; 
 var number_crimes_by_district = [];
 var num_police_districts = 25;
 var heatmap;
@@ -276,6 +277,24 @@ function calculateDistanceOfHouse(lat1, lon1, lat2, lon2) {
   return d.toFixed(3);
 }
 
+// Number of crimes to 1 km of distance
+function number_of_crimes() {
+	lat_house = selected_house.lat;
+	lng_house = selected_house.lng;
+	total = 0;
+	for ( var j=0; j < crimes_lat_lon_2.length; j++){
+		lat_crime = crimes_lat_lon_2[j].latitude;
+		lng_crime = crimes_lat_lon_2[j].longitude;
+		//console.log(lat_crime + " " + lng_crime);
+		if (calculateDistanceOfHouse(lat_house, lng_house, lat_crime, lng_crime) < 1){
+			total++;
+		}
+	}
+	$('#number_crimes').html('<strong>' + total + '</strong>');
+}
+
+
+
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
@@ -311,7 +330,7 @@ function calculateDistance(){
 		if (status == google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;
 			var destinations = response.destinationAddresses;
-			console.log(select_house_in_map.address_house);
+			//console.log(select_house_in_map.address_house);
 
 			for (var i = 0; i < origins.length; i++) {
 			    var results = response.rows[i].elements;
@@ -575,11 +594,13 @@ function create_marker_house(latLng, address_house, icon, myinfowindow, address,
 	
 	m.addListener('click', function() {
 		new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
+		//console.log(new_selected_house);
 		
 		selected_house = new_selected_house;
 		calculateDistance();
 		select_house_in_map = this;
-		changeIconHouse()
+		number_of_crimes();
+		changeIconHouse();
 	});
 
 	// Add infoWindow
@@ -589,6 +610,8 @@ function create_marker_house(latLng, address_house, icon, myinfowindow, address,
 
 	return m
 }
+
+
 
 
 // https://dev.socrata.com/foundry/data.cityofchicago.org/6zsd-86xi
@@ -607,9 +630,11 @@ function crimesMap(){
 			var node = data[pos];
 			var crime = new google.maps.LatLng(node.latitude, node.longitude);
 			crimes_lat_lon.push(crime);
+			crimes_lat_lon_2[pos] = node;
+			//console.log(crimes_lat_lon_2[pos]);
 			number_crimes_by_district[+node.district] += 1;
 		}
-
+		//crimes_lat_lon_2 = crimes_lat_lon;
 		//console.log(number_crimes_by_district);
 
 		heatmap = new google.maps.visualization.HeatmapLayer({
@@ -623,13 +648,19 @@ function crimesMap(){
 		//heatmap.setMap(map);
 	}).fail(function(error){
 			console.log(error);
-		});
+	});
+
+
 }
 
 // Show or hide heatmap
 $('#security').click(function(event) {
 	heatmap.setMap(heatmap.getMap() ? null : map);
 });
+
+
+
+
 
 function getPriceHouse(){
 //http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz199ggom3y17_7ucak&address=2114+Bigelow+Ave&citystatezip=Seattle%2C+WA&rentzestimate=true

@@ -5,17 +5,19 @@ var url = "http://api.openweathermap.org/data/2.5/weather?q=chicago&appid=08cce1
 xmlhttp.open("GET", url, true);
 xmlhttp.send();
 
-//once the request is accepted, process the fowllowing function to get data and complete the app information
 xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var myArr = xmlhttp.responseText;
         var text = myArr;
         var json = JSON.parse(text);
-        //alert(JSON.parse(text).coord.lon);
-        //document.getElementById("id01").innerHTML = myArr;
-        //console.log(json);
     
-        document.getElementById("climate").innerHTML = "Today the weather is <b>" + json.weather[0].main + "</b>";
+        document.getElementById("climate").innerHTML =  "<strong>" + json.weather[0].description + "</strong>";
+        document.getElementById("weather").innerHTML= "<strong> Humidity: </strong>" + json.main.humidity + "<br />"
+        												+ "<strong> Pressure: </strong>" + json.main.pressure + "<br />"
+        												+ "<strong> Temperature: </strong>" + json.main.temp + "<br />"
+        												+ "<strong> Maximum temperature: </strong>" + json.main.temp_max + "<br />"
+        												+ "<strong> Minimum temperature: </strong>" + json.main.temp_min;
+        console.log(json);
 	}
 }
 

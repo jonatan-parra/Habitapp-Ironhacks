@@ -16,6 +16,11 @@
     font-weight: bold;
 }
 
+ .btn {
+    padding: 10px 38px;
+    font-size: 16px;
+}
+
 
 
 input[type=range] {
@@ -152,7 +157,7 @@ a, a:hover, a:focus, a:active{
 }
 
 .section-padding{
-	padding: 60px 0px;
+	padding: 40px 0px;
 
 }
 h2 {

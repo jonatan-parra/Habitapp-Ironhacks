@@ -89,15 +89,13 @@
 							<li>You can choose to use different means of transportation, such as  walking, public transportation, car</li>
 							<li>You will get the travel time!</li>
 						</ul>
+						<li>You can see the number of crimes near the selected house</li>
 						<li>You can see a map of heat related to the number of crimes of the last year</li>
 						<li>You can see a diagram comparing the number of crimes by district</li>
-
 					</ol>
 				</div>
-
 			</div>
 		</div>
-
 	</section>
 	<!-- End instructions-->
  
@@ -135,29 +133,34 @@
 				<div class="col-md-6">
 					<h2 title="Which places would you like to have close to where you will live">Your favorite sites</h2>
 
-					<div class="checkbox checkbox-info checkbox-circle">
+					<div class="checkbox checkbox-info checkbox-circle">						
 						<input id="checkbox1" type="checkbox" class="styled" onclick="show_or_hide_site(1)">
 						<label for="checkbox1"> Parks </label>
+						<img src="img/tree.png">
 					</div>	
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox5" type="checkbox" class="styled" onclick="show_or_hide_site(5)"> 
 						<label for="checkbox5">	Libraries </label>
+						<img src="img/library.png">
 					</div>	
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox3" type="checkbox" onclick="show_or_hide_site(3)">
 						<label for="checkbox3"> Fire stations </label>
+						<img src="img/fire_station.png">
 					</div>	
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox2" type="checkbox" onclick="show_or_hide_site(2)"> 
 						<label for="checkbox2"> Schools	</label>
+						<img src="img/school.png">
 					</div>	
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox6" type="checkbox" onclick="show_or_hide_site(6)"> 
 						<label for="checkbox6" > Police station </label>
+						<img src="img/police.png">
 					</div>
 
 					<label> Food</label>
@@ -165,16 +168,19 @@
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox4" type="checkbox" onclick="show_or_hide_site(4)"> 
 						<label for="checkbox4"> Farmers markets	</label>
+						<img src="img/market.png">
 					</div>	
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox7" type="checkbox" onclick="show_or_hide_site(7)"> 
 						<label for="checkbox7" > Grocery store chains </label>
+						<img src="img/store_chain.png">
 					</div>
 
 					<div class="checkbox checkbox-info checkbox-circle">
 						<input id="checkbox8" type="checkbox" onclick="show_or_hide_site(8)"> 
 						<label for="checkbox8" > Independent grocery stores </label>
+						<img src="img/independent_store.png">
 					</div>
 
 
@@ -231,35 +237,33 @@
 				<div class="col-md-5">
 					<h2>Security information </h2>
 
+					<p>In the last year there have been <span id="number_crimes">0</span> crimes to one kilometer of this property</p>
+
 					<p>Do you want to know the areas where there are the most crimes in the last year?</p>
 					<p>Press the button to show or hide the heat map of crimes</p>
 
 					<input class="btn btn-primary" type="button" id="security" value="Toogle heat map">
-                    
+                  
                     <br><br>
                     <h2>Climatic information </h2>
 
-					<ul>
-						<li>Welcome to Chicago, do you know the climate in this city?</li>
-					</ul>
+					<p>Welcome to Chicago, the climate today is: <span id="climate"></span></p>
+					
+					<p id="weather"></p>
 
-					<div id="climate"></div>
-
-					<br />
-					<input class="btn btn-primary" type="button" id="buscar" value="Buscar">
+					
 
 				</div>
 			</div>
 
 			<div class="row">
 				<h2>Graph of the number of crimes</h2>
+				<p>Here are the district with the number crimes in the last year.</p>
 				<div class="col-md-6">
-	                <p>Here are the district with the number crimes in the last year.</p>
 	                <div id="securityInTheDistrict_1"></div>			
 				</div>
 
 				<div class="col-md-6">
-					<br>
 	                <div id="securityInTheDistrict_2"></div>			
 				</div>
 			</div>
