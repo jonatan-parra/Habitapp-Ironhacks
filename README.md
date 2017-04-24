@@ -51,4 +51,4 @@ Works with html, css and JS
 Tested in Chrome and Opera
 
 ### Additional information 
-E.g. any problems you faced/fixed, where you reached out to for help, etc.
+The weather data does not load due to the http protocol, you must activate the option "insecure content" in the browser to see them
