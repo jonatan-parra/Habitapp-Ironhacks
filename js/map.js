@@ -238,9 +238,29 @@ function updateHomes(){
   	for ( s in markers_house ){
 		markers_house[s].setMap(null);	
 	}
-	//console.log("Distancia maxima " +  distance); 
+
 	show_house(maxDistance);
 }
+
+var previous_house = null;
+
+function changeIconHouse(){
+	if (previous_house != null){
+		m1 = previous_house;
+		markers_house[m1.number_house].setMap(null);
+	    markers_house[m1.number_house] = create_marker_house(m1.position, m1.address_house, 'img/home.png', m1.infowindow, m1.address_house, m1.number_house);
+		
+	} else {
+		console.log("Entro al else");
+	}
+	// Save previous house
+	previous_house = select_house_in_map;
+
+	m1 = select_house_in_map;
+	markers_house[m1.number_house].setMap(null);
+	markers_house[m1.number_house] = create_marker_house(m1.position, m1.address_house, 'img/home2.png', m1.infowindow, m1.address_house, m1.number_house);
+}
+
 
 function calculateDistanceOfHouse(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
@@ -537,25 +557,8 @@ function show_house( maxDistance=50 ) {
 				var myinfowindow = new google.maps.InfoWindow({	content: mytext	});
 
 				// Add marker
-		    	m = new google.maps.Marker({
-						    	position: latLng, map: map, title: address_house, icon: 'img/home.png', 
-						    	infowindow: myinfowindow, address_house: data_house.data[i][12]
-						  	});
+		    	m = create_marker_house(latLng, address_house, 'img/home.png', myinfowindow, data_house.data[i][12], i);
 		    	
-		    	m.addListener('click', function() {
-										new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
-										// Calculate distance
-										selected_house = new_selected_house;
-	  									calculateDistance();
-	  									select_house_in_map = this;
-				});
-
-				// Add infoWindow
-			  	google.maps.event.addListener(m, 'click', function() {
-			      this.infowindow.open(map, this);
-			    });
-
-
 				markers_house[i] = m;
 			}
 	    }
@@ -563,6 +566,29 @@ function show_house( maxDistance=50 ) {
     showing_site[S_HOUSE] = true;
     return markers_house;
 } 
+
+function create_marker_house(latLng, address_house, icon, myinfowindow, address, i){
+	m = new google.maps.Marker({
+		position: latLng, map: map, title: address_house, icon: icon, 
+		infowindow: myinfowindow, address_house: address, number_house: i
+	});
+	
+	m.addListener('click', function() {
+		new_selected_house = JSON.parse('{ "lat":'+ this.position.lat() +', "lng":'+ this.position.lng() +' }');
+		
+		selected_house = new_selected_house;
+		calculateDistance();
+		select_house_in_map = this;
+		changeIconHouse()
+	});
+
+	// Add infoWindow
+	google.maps.event.addListener(m, 'click', function() {
+		this.infowindow.open(map, this);
+	});
+
+	return m
+}
 
 
 // https://dev.socrata.com/foundry/data.cityofchicago.org/6zsd-86xi
