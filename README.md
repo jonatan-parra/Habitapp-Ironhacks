@@ -1,6 +1,6 @@
 # Habitapp
 
-# Link to page https://jonatan360.github.io/Iron_Hacks/index.html
+# Link to page https://jonatan360.github.io/Habitat-Ironhacks/
 
 ### Keywords
 Safety, market, budget, recreation, transportation, map, rent, calculate distance, park, police station, libraries.
